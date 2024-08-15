@@ -20,6 +20,7 @@ export default function BookmarkLayout({ children }: PropsWithChildren) {
             alt="자리나따 즐겨찾기 페이지 아이콘"
             width={112}
             height={112}
+            priority
           />
           <Margin vertical size={18} />
           <Text type="bold-32" colorType="gray900">

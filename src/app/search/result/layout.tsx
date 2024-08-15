@@ -15,7 +15,13 @@ export default function SearchResultLayout({ children }: PropsWithChildren) {
     <main>
       <Flex vertical justify="center">
         <Flex vertical style={{ width: 1140, padding: '60px 0', minHeight: 'calc(100vh - 64px)' }}>
-          <Image src={'/search.svg'} alt="자리나따 열차조회 페이지" width={150} height={139} />
+          <Image
+            src={'/search.svg'}
+            alt="자리나따 열차조회 페이지"
+            width={150}
+            height={139}
+            priority
+          />
           <Margin vertical size={4} />
           <Text type="bold-32" colorType="gray900">
             원하는 자리를 조회했어요
