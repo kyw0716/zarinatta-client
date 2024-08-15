@@ -1,0 +1,26 @@
+export type ColorType = keyof typeof color;
+
+export const color = {
+  primary50: '#EFF8FF',
+  primary100: '#DAEEFF',
+  primary200: '#BEE1FF',
+  primary300: '#80C8FF',
+  primary400: '#5DB4FD',
+  primary500: '#3794FA',
+  primary600: '#2176EF',
+  primary700: '#195FDC',
+  primary800: '#1B4DB2',
+  primary900: '#1C448C',
+  primary950: '#162A55',
+  gray50: '#F7F7F7',
+  gray100: '#EDEDED',
+  gray200: '#DFDFDF',
+  gray300: '#C8C8C8',
+  gray400: '#A8A8A8',
+  gray500: '#999999',
+  gray600: '#888888',
+  gray700: '#7B7B7B',
+  gray800: '#676767',
+  gray900: '#545454',
+  gray950: '#363636',
+};
