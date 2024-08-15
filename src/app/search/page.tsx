@@ -23,7 +23,7 @@ interface SearchPageParams extends PageProps {
 export default function SearchPage({ searchParams }: SearchPageParams) {
   return (
     <div>
-      <Image src="/banner.svg" alt="자리나따 배너 이미지" width={1280} height={387} priority />
+      <Image src="/banner.svg" alt="자리나따 배너 이미지" width={1280} height={387} />
       열차조회 페이지
     </div>
   );

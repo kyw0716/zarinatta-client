@@ -26,7 +26,6 @@ export default function HelpLayout({ children }: PropsWithChildren) {
               alt="자리나따 고객센터 페이지 아이콘"
               width={114.5}
               height={105}
-              priority
             />
             <Margin vertical size={20} />
             <Text type="bold-32" colorType="gray900">
