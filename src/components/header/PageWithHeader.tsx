@@ -33,7 +33,7 @@ export default function PageWithHeader({ children }: PropsWithChildren) {
           <span>로그인</span>
         </Flex>
       </Header>
-      <Content>{children}</Content>
+      <Content style={{ backgroundColor: '#f7f7f7' }}>{children}</Content>
     </Layout>
   );
 }

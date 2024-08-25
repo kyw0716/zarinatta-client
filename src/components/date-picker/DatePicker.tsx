@@ -11,8 +11,8 @@ type Range<N extends number, Result extends Array<unknown> = []> = Result['lengt
   ? Result[number] | N
   : Range<N, [...Result, Result['length']]>;
 
-type Date = Range<31> extends infer R ? Exclude<R, 0> : never;
-type Month = Range<12> extends infer R ? Exclude<R, 0> : never;
+export type Date = Range<31> extends infer R ? Exclude<R, 0> : never;
+export type Month = Range<12> extends infer R ? Exclude<R, 0> : never;
 
 interface DatePickerCoreProps {
   year: number;
