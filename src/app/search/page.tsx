@@ -8,7 +8,14 @@ import dayjs from 'dayjs';
 import Margin from '@/components/design-system/Margin';
 import Text from '@/components/design-system/Text';
 import { color } from '@/components/design-system/Color';
-import { ReadonlyURLSearchParams, useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
+import {
+  coreSearchParamKeys,
+  getSearchParamsObject,
+  getSearchURLFromObject,
+} from '@/utils/search-params';
+import { useSearchRouter } from '@/hooks/use-search-router';
+import { useRouter } from 'next/navigation';
 
 type Stations = 'KTX' | 'SRT' | 'ITX';
 
@@ -33,7 +40,6 @@ const departTimeValues = Array.from({ length: 24 }).map(
 const departTimeLabels = Array.from({ length: 24 }).map(
   (_, i) => `${String(i).padStart(2, '0')}:00시 이후`
 );
-
 const departTimeSearchOptions: Record<
   'label' | 'value',
   (typeof departTimeLabels)[number] | (typeof departTimeValues)[number]
@@ -42,59 +48,26 @@ const departTimeSearchOptions: Record<
   value: departTimeValues[index],
 }));
 
-const getSearchURLFromObject = (object?: Record<string, string | number>) => {
-  if (object === undefined) return '';
-
-  const queryParams: string[] = [];
-
-  Object.entries(object).forEach(([key, value]) => {
-    queryParams.push(`${key}=${encodeURIComponent(value)}`);
-  });
-
-  return queryParams.join('&');
-};
-
-const coreSearchParamKeys = [
-  'departStation',
-  'arriveStation',
-  'departTime',
-  'departDate',
-  'trainType',
-];
-const searchParamKeys = [...coreSearchParamKeys, 'searchKeyword', 'isModalOpen', 'page', 'size'];
-
-const getSearchParamsObject = (searchParams: ReadonlyURLSearchParams) => {
-  const searchParamsObject: Record<(typeof searchParamKeys)[number], string> = {};
-
-  searchParamKeys.forEach((key) => {
-    const value = searchParams.get(key);
-
-    if (value !== null) {
-      searchParamsObject[key] = value;
-    }
-  });
-
-  return searchParamsObject;
-};
-
 export default function SearchPage() {
-  const searchParams = getSearchParamsObject(useSearchParams());
   const router = useRouter();
-  const [currentMonthSelectedDate, setCurrentMonthSelectedDate] = useState<number>(
-    Number(searchParams['departDate'] ?? dayjs().date())
-  );
-  const [nextMonthSelectedDate, setNextMonthSelectedDate] = useState<number>(-1);
-
+  const searchParams = getSearchParamsObject(useSearchParams());
+  const month = Number(searchParams['departDate']?.slice(2, 4));
+  const date = Number(searchParams['departDate']?.slice(4));
   const isAllRequiredFieldSelected = coreSearchParamKeys.every((key) =>
     Object.keys(searchParams).includes(key)
   );
-  const currentMonth = dayjs().month() + 1;
-  const nextMonth = currentMonth + 1;
 
-  const isCurrentMonthSelected = currentMonthSelectedDate !== -1;
-  // 추후 API 호출에 사용될 값
-  const selectedMonth = isCurrentMonthSelected ? currentMonthSelectedDate : nextMonthSelectedDate;
-  const selectedDate = isCurrentMonthSelected ? currentMonthSelectedDate : nextMonthSelectedDate;
+  const { routeSearchPageWithParams, routeSearchPageWithoutParams } = useSearchRouter();
+
+  const [currentMonthSelectedDate, setCurrentMonthSelectedDate] = useState<number>(
+    month === dayjs().month() + 1 ? date : -1
+  );
+  const [nextMonthSelectedDate, setNextMonthSelectedDate] = useState<number>(
+    month === dayjs().month() + 2 ? date : -1
+  );
+
+  const currentMonth = dayjs().month() + 1;
+  const nextMonth = currentMonth + 1 > 12 ? 1 : currentMonth + 1;
 
   const onSelectDate = (month: number, date: number) => {
     if (month === currentMonth) {
@@ -122,26 +95,29 @@ export default function SearchPage() {
             selectedDate={currentMonthSelectedDate}
             setSelectedDate={(date) => {
               onSelectDate(currentMonth, date);
-              // TODO: 날짜 입력값 변경시 searchParams에 반영되도록 하기
-              // TODO: 날짜 입력값 선택 해제시 searchParams에도 제거되도록 하기
-              router.push(
-                `/search?${getSearchURLFromObject({ ...searchParams, departDate: date })}`,
-                { scroll: false }
-              );
+              if (date === -1) {
+                routeSearchPageWithoutParams('departDate');
+                return;
+              }
+              routeSearchPageWithParams({ departDate: dayjs().date(date).format('YYMMDD') });
             }}
             startMonth={currentMonth as Month}
           />
           <DatePicker
-            year={2024}
+            year={currentMonth === 12 ? dayjs().year() + 1 : dayjs().year()}
             selectedDate={nextMonthSelectedDate}
             setSelectedDate={(date) => {
               onSelectDate(nextMonth, date);
-              // TODO: 날짜 입력값 변경시 searchParams에 반영되도록 하기
-              // TODO: 날짜 입력값 선택 해제시 searchParams에도 제거되도록 하기
-              router.push(
-                `/search?${getSearchURLFromObject({ ...searchParams, departDate: date })}`,
-                { scroll: false }
-              );
+              if (date === -1) {
+                routeSearchPageWithoutParams('departDate');
+                return;
+              }
+              routeSearchPageWithParams({
+                departDate: dayjs()
+                  .month(nextMonth - 1)
+                  .date(date)
+                  .format('YYMMDD'),
+              });
             }}
             startMonth={nextMonth as Month}
           />
@@ -152,12 +128,28 @@ export default function SearchPage() {
           <SearchMenu
             icon="start-station"
             title="출발하시는 역을 선택해주세요."
-            selectComponent={<></>}
+            selectComponent={
+              <Select
+                variant="borderless"
+                defaultValue={searchParams['departStation']}
+                options={[{ label: '서울역', value: '서울역' }]}
+                onSelect={(value) => routeSearchPageWithParams({ departStation: value })}
+                style={{ borderBottom: `2px solid ${color['gray300']}` }}
+              />
+            }
           />
           <SearchMenu
             icon="end-station"
             title="도착하시는 역을 선택해주세요."
-            selectComponent={<></>}
+            selectComponent={
+              <Select
+                variant="borderless"
+                defaultValue={searchParams['arriveStation']}
+                options={[{ label: '부산역', value: '부산역' }]}
+                onSelect={(value) => routeSearchPageWithParams({ arriveStation: value })}
+                style={{ borderBottom: `2px solid ${color['gray300']}` }}
+              />
+            }
           />
         </Flex>
         <Margin vertical size={20} />
@@ -170,12 +162,7 @@ export default function SearchPage() {
                 variant="borderless"
                 defaultValue={searchParams['trainType']}
                 options={stationSearchOptions}
-                onSelect={(value) =>
-                  router.push(
-                    `/search?${getSearchURLFromObject({ ...searchParams, trainType: value })}`,
-                    { scroll: false }
-                  )
-                }
+                onSelect={(value) => routeSearchPageWithParams({ trainType: value })}
                 style={{ borderBottom: `2px solid ${color['gray300']}` }}
               />
             }
@@ -188,12 +175,7 @@ export default function SearchPage() {
                 variant="borderless"
                 defaultValue={searchParams['departTime']}
                 options={departTimeSearchOptions}
-                onSelect={(value) =>
-                  router.push(
-                    `/search?${getSearchURLFromObject({ ...searchParams, departTime: value })}`,
-                    { scroll: false }
-                  )
-                }
+                onSelect={(value) => routeSearchPageWithParams({ departTime: value })}
                 style={{ borderBottom: `2px solid ${color['gray300']}` }}
               />
             }
@@ -201,7 +183,6 @@ export default function SearchPage() {
         </Flex>
         <Margin vertical size={60} />
       </Flex>
-      {/* TODO: 버튼 비활성화 조건 설정 및 색상 분기 처리 */}
       <Flex
         justify="center"
         align="center"
@@ -212,8 +193,9 @@ export default function SearchPage() {
           borderRadius: 8,
           backgroundColor: color[isAllRequiredFieldSelected ? 'primary500' : 'primary100'],
           border: 'none',
+          cursor: 'pointer',
         }}
-        onClick={() => alert('열차조회하기 눌렀음')}
+        onClick={() => router.push(`/search/result?${getSearchURLFromObject({ ...searchParams })}`)}
       >
         <Text type="semiBold-20" colorType={isAllRequiredFieldSelected ? 'white' : 'primary200'}>
           열차 조회하기

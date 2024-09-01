@@ -66,7 +66,7 @@ export default function DatePicker({
     if (multiple) return;
 
     if (selectedDate === date) {
-      setSelectedDate(0);
+      setSelectedDate(-1);
       return;
     }
     setSelectedDate(date);

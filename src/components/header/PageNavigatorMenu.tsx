@@ -1,6 +1,7 @@
 'use client';
 
 import { Flex } from 'antd';
+import dayjs from 'dayjs';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -13,7 +14,10 @@ export default function PageNavigatorMenu() {
 
   return (
     <Flex justify="space-between" style={{ width: 276 }}>
-      <Link href={'/search'} style={{ color: isSearchPage ? '#3794FA' : '#A8A8A8' }}>
+      <Link
+        href={`/search?departDate=${dayjs().format('YYMMDD')}`}
+        style={{ color: isSearchPage ? '#3794FA' : '#A8A8A8' }}
+      >
         열차조회
       </Link>
       <Link href={'/bookmark'} style={{ color: isBookmarkPage ? '#3794FA' : '#A8A8A8' }}>
