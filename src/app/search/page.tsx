@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Flex, Select } from 'antd';
 import DatePicker, { Month } from '@/components/date-picker/DatePicker';
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import dayjs from 'dayjs';
 import Margin from '@/components/design-system/Margin';
 import Text from '@/components/design-system/Text';
@@ -107,122 +107,120 @@ export default function SearchPage() {
   };
 
   return (
-    <Suspense>
-      <Flex vertical align="center">
-        <Flex justify="center" style={{ width: '100vw', backgroundColor: 'white' }}>
-          <Image src="/banner.svg" alt="자리나따 배너 이미지" width={1280} height={387} />
-        </Flex>
-        <Margin vertical size={25} />
-        <Flex vertical justify="center" style={{ width: 1024 }}>
-          <Flex
-            justify="space-between"
-            style={{ padding: '32px 62px', backgroundColor: 'white', borderRadius: 20 }}
-          >
-            <DatePicker
-              year={dayjs().year()}
-              selectedDate={currentMonthSelectedDate}
-              setSelectedDate={(date) => {
-                onSelectDate(currentMonth, date);
-                // TODO: 날짜 입력값 변경시 searchParams에 반영되도록 하기
-                // TODO: 날짜 입력값 선택 해제시 searchParams에도 제거되도록 하기
-                router.push(
-                  `/search?${getSearchURLFromObject({ ...searchParams, departDate: date })}`,
-                  { scroll: false }
-                );
-              }}
-              startMonth={currentMonth as Month}
-            />
-            <DatePicker
-              year={2024}
-              selectedDate={nextMonthSelectedDate}
-              setSelectedDate={(date) => {
-                onSelectDate(nextMonth, date);
-                // TODO: 날짜 입력값 변경시 searchParams에 반영되도록 하기
-                // TODO: 날짜 입력값 선택 해제시 searchParams에도 제거되도록 하기
-                router.push(
-                  `/search?${getSearchURLFromObject({ ...searchParams, departDate: date })}`,
-                  { scroll: false }
-                );
-              }}
-              startMonth={nextMonth as Month}
-            />
-          </Flex>
-          <Margin vertical size={20} />
-          {/* TODO: selectComponent 각각 만들기 */}
-          <Flex justify="space-between">
-            <SearchMenu
-              icon="start-station"
-              title="출발하시는 역을 선택해주세요."
-              selectComponent={<></>}
-            />
-            <SearchMenu
-              icon="end-station"
-              title="도착하시는 역을 선택해주세요."
-              selectComponent={<></>}
-            />
-          </Flex>
-          <Margin vertical size={20} />
-          <Flex justify="space-between" style={{ width: 1024 }}>
-            <SearchMenu
-              icon="train"
-              title="기차 종류를 선택해주세요."
-              selectComponent={
-                <Select
-                  variant="borderless"
-                  defaultValue={searchParams['trainType']}
-                  options={stationSearchOptions}
-                  onSelect={(value) =>
-                    router.push(
-                      `/search?${getSearchURLFromObject({ ...searchParams, trainType: value })}`,
-                      { scroll: false }
-                    )
-                  }
-                  style={{ borderBottom: `2px solid ${color['gray300']}` }}
-                />
-              }
-            />
-            <SearchMenu
-              icon="clock"
-              title="출발 시간을 선택해주세요."
-              selectComponent={
-                <Select
-                  variant="borderless"
-                  defaultValue={searchParams['departTime']}
-                  options={departTimeSearchOptions}
-                  onSelect={(value) =>
-                    router.push(
-                      `/search?${getSearchURLFromObject({ ...searchParams, departTime: value })}`,
-                      { scroll: false }
-                    )
-                  }
-                  style={{ borderBottom: `2px solid ${color['gray300']}` }}
-                />
-              }
-            />
-          </Flex>
-          <Margin vertical size={60} />
-        </Flex>
-        {/* TODO: 버튼 비활성화 조건 설정 및 색상 분기 처리 */}
-        <Flex
-          justify="center"
-          align="center"
-          component={'button'}
-          style={{
-            width: 608,
-            height: 54,
-            borderRadius: 8,
-            backgroundColor: color[isAllRequiredFieldSelected ? 'primary500' : 'primary100'],
-            border: 'none',
-          }}
-          onClick={() => alert('열차조회하기 눌렀음')}
-        >
-          <Text type="semiBold-20" colorType={isAllRequiredFieldSelected ? 'white' : 'primary200'}>
-            열차 조회하기
-          </Text>
-        </Flex>
-        <Margin vertical size={197} />
+    <Flex vertical align="center">
+      <Flex justify="center" style={{ width: '100vw', backgroundColor: 'white' }}>
+        <Image src="/banner.svg" alt="자리나따 배너 이미지" width={1280} height={387} />
       </Flex>
-    </Suspense>
+      <Margin vertical size={25} />
+      <Flex vertical justify="center" style={{ width: 1024 }}>
+        <Flex
+          justify="space-between"
+          style={{ padding: '32px 62px', backgroundColor: 'white', borderRadius: 20 }}
+        >
+          <DatePicker
+            year={dayjs().year()}
+            selectedDate={currentMonthSelectedDate}
+            setSelectedDate={(date) => {
+              onSelectDate(currentMonth, date);
+              // TODO: 날짜 입력값 변경시 searchParams에 반영되도록 하기
+              // TODO: 날짜 입력값 선택 해제시 searchParams에도 제거되도록 하기
+              router.push(
+                `/search?${getSearchURLFromObject({ ...searchParams, departDate: date })}`,
+                { scroll: false }
+              );
+            }}
+            startMonth={currentMonth as Month}
+          />
+          <DatePicker
+            year={2024}
+            selectedDate={nextMonthSelectedDate}
+            setSelectedDate={(date) => {
+              onSelectDate(nextMonth, date);
+              // TODO: 날짜 입력값 변경시 searchParams에 반영되도록 하기
+              // TODO: 날짜 입력값 선택 해제시 searchParams에도 제거되도록 하기
+              router.push(
+                `/search?${getSearchURLFromObject({ ...searchParams, departDate: date })}`,
+                { scroll: false }
+              );
+            }}
+            startMonth={nextMonth as Month}
+          />
+        </Flex>
+        <Margin vertical size={20} />
+        {/* TODO: selectComponent 각각 만들기 */}
+        <Flex justify="space-between">
+          <SearchMenu
+            icon="start-station"
+            title="출발하시는 역을 선택해주세요."
+            selectComponent={<></>}
+          />
+          <SearchMenu
+            icon="end-station"
+            title="도착하시는 역을 선택해주세요."
+            selectComponent={<></>}
+          />
+        </Flex>
+        <Margin vertical size={20} />
+        <Flex justify="space-between" style={{ width: 1024 }}>
+          <SearchMenu
+            icon="train"
+            title="기차 종류를 선택해주세요."
+            selectComponent={
+              <Select
+                variant="borderless"
+                defaultValue={searchParams['trainType']}
+                options={stationSearchOptions}
+                onSelect={(value) =>
+                  router.push(
+                    `/search?${getSearchURLFromObject({ ...searchParams, trainType: value })}`,
+                    { scroll: false }
+                  )
+                }
+                style={{ borderBottom: `2px solid ${color['gray300']}` }}
+              />
+            }
+          />
+          <SearchMenu
+            icon="clock"
+            title="출발 시간을 선택해주세요."
+            selectComponent={
+              <Select
+                variant="borderless"
+                defaultValue={searchParams['departTime']}
+                options={departTimeSearchOptions}
+                onSelect={(value) =>
+                  router.push(
+                    `/search?${getSearchURLFromObject({ ...searchParams, departTime: value })}`,
+                    { scroll: false }
+                  )
+                }
+                style={{ borderBottom: `2px solid ${color['gray300']}` }}
+              />
+            }
+          />
+        </Flex>
+        <Margin vertical size={60} />
+      </Flex>
+      {/* TODO: 버튼 비활성화 조건 설정 및 색상 분기 처리 */}
+      <Flex
+        justify="center"
+        align="center"
+        component={'button'}
+        style={{
+          width: 608,
+          height: 54,
+          borderRadius: 8,
+          backgroundColor: color[isAllRequiredFieldSelected ? 'primary500' : 'primary100'],
+          border: 'none',
+        }}
+        onClick={() => alert('열차조회하기 눌렀음')}
+      >
+        <Text type="semiBold-20" colorType={isAllRequiredFieldSelected ? 'white' : 'primary200'}>
+          열차 조회하기
+        </Text>
+      </Flex>
+      <Margin vertical size={197} />
+    </Flex>
   );
 }
 

@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import { AntdRegistry } from '@ant-design/nextjs-registry';
 import '../static/css/reset.css';
 import PageWithHeader from '@/components/header/PageWithHeader';
+import { Suspense } from 'react';
 
 export const metadata: Metadata = {
   title: '자리나따',
@@ -25,7 +26,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={pretendard.variable}>
         <AntdRegistry>
-          <PageWithHeader>{children}</PageWithHeader>
+          <Suspense>
+            <PageWithHeader>{children}</PageWithHeader>
+          </Suspense>
         </AntdRegistry>
       </body>
     </html>
