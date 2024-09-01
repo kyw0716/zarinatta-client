@@ -2,8 +2,9 @@ import { Flex } from 'antd';
 import dayjs from 'dayjs';
 import Text from '../design-system/Text';
 import Margin from '../design-system/Margin';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { color } from '../design-system/Color';
+import { useDatePicker } from '@/hooks/use-date-picker';
 
 const DaysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
 
@@ -51,29 +52,7 @@ export default function DatePicker({
   maxCount,
 }: DatePickerProps) {
   // TODO: JSX에서 사용되는 값만 남기고 나머지 정리하기
-  const endDateOfMonth = useMemo(
-    () => dayjs(`${year}-${startMonth}-${startDate}`).endOf('month').date(),
-    [year, startMonth, startDate]
-  );
-  const startDayOfMonth = useMemo(() => dayjs(`${year}-${startMonth}-1`).day(), []);
-  const datesOfMonth = useMemo(
-    () => Array.from({ length: endDateOfMonth }).map((_, i) => i + 1),
-    [endDateOfMonth]
-  );
-  const dateCells = useMemo(
-    () => [...Array.from({ length: startDayOfMonth }).map(() => 0), ...datesOfMonth],
-    [startDayOfMonth, datesOfMonth]
-  );
-  const dateRows = useMemo(
-    () =>
-      dateCells.reduce((prev, cur, i) => {
-        const index = Math.floor(i / 7);
-        if (Array.isArray(prev[index])) prev[index].push(cur);
-        else prev[index] = [cur];
-        return prev;
-      }, [] as number[][]),
-    [dateCells]
-  );
+  const { dateRows } = useDatePicker(year, startMonth, startDate);
 
   const selectDate = (date: number) => {
     if (multiple) {
