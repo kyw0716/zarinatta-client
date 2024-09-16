@@ -16,6 +16,8 @@ import {
 } from '@/utils/search-params';
 import { useSearchRouter } from '@/hooks/use-search-router';
 import { useRouter } from 'next/navigation';
+import { useModalStore } from '@/hooks/use-modal-store';
+import StationSearchModal from '@/components/modal/StationSearchModal';
 
 type Stations = 'KTX' | 'SRT' | 'ITX';
 
@@ -68,6 +70,8 @@ export default function SearchPage() {
 
   const currentMonth = dayjs().month() + 1;
   const nextMonth = currentMonth + 1 > 12 ? 1 : currentMonth + 1;
+
+  const openModal = useModalStore(({ openModal }) => openModal);
 
   const onSelectDate = (month: number, date: number) => {
     if (month === currentMonth) {
@@ -129,26 +133,40 @@ export default function SearchPage() {
             icon="start-station"
             title="출발하시는 역을 선택해주세요."
             selectComponent={
-              <Select
-                variant="borderless"
-                defaultValue={searchParams['departStation']}
-                options={[{ label: '서울역', value: '서울역' }]}
-                onSelect={(value) => routeSearchPageWithParams({ departStation: value })}
-                style={{ borderBottom: `2px solid ${color['gray300']}` }}
-              />
+              <Flex
+                align="center"
+                onClick={(e) => {
+                  e.preventDefault();
+                  openModal(<StationSearchModal departOrArrive="depart" />);
+                }}
+                style={{
+                  height: 30,
+                  borderBottom: `2px solid ${color['gray300']}`,
+                  padding: '0 11px',
+                }}
+              >
+                {searchParams['departStation'] ?? <Text colorType={'gray300'}>역 검색</Text>}
+              </Flex>
             }
           />
           <SearchMenu
             icon="end-station"
             title="도착하시는 역을 선택해주세요."
             selectComponent={
-              <Select
-                variant="borderless"
-                defaultValue={searchParams['arriveStation']}
-                options={[{ label: '부산역', value: '부산역' }]}
-                onSelect={(value) => routeSearchPageWithParams({ arriveStation: value })}
-                style={{ borderBottom: `2px solid ${color['gray300']}` }}
-              />
+              <Flex
+                align="center"
+                onClick={(e) => {
+                  e.preventDefault();
+                  openModal(<StationSearchModal departOrArrive="arrive" />);
+                }}
+                style={{
+                  height: 30,
+                  borderBottom: `2px solid ${color['gray300']}`,
+                  padding: '0 11px',
+                }}
+              >
+                {searchParams['arriveStation'] ?? <Text colorType={'gray300'}>역 검색</Text>}
+              </Flex>
             }
           />
         </Flex>
@@ -195,7 +213,11 @@ export default function SearchPage() {
           border: 'none',
           cursor: 'pointer',
         }}
-        onClick={() => router.push(`/search/result?${getSearchURLFromObject({ ...searchParams })}`)}
+        onClick={() =>
+          router.push(
+            `/search/result?${getSearchURLFromObject({ ...searchParams, departTime: `${searchParams['departDate']}${searchParams['departTime']}` })}`
+          )
+        }
       >
         <Text type="semiBold-20" colorType={isAllRequiredFieldSelected ? 'white' : 'primary200'}>
           열차 조회하기
