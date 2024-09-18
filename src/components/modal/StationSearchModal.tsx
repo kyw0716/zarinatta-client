@@ -1,10 +1,14 @@
 'use client';
 
-import { useStationSearchQuery } from '@/hooks/query/use-station-search-query';
+import {
+  useFrequentStationSearchQuery,
+  useStationSearchQuery,
+} from '@/hooks/query/use-station-search-query';
 import { useModalStore } from '@/hooks/use-modal-store';
 import { useSearchRouter } from '@/hooks/use-search-router';
 import { Flex, Input } from 'antd';
 import { useState } from 'react';
+import Margin from '../design-system/Margin';
 
 interface StationSearchModalProps {
   departOrArrive: 'depart' | 'arrive';
@@ -12,16 +16,17 @@ interface StationSearchModalProps {
 
 export default function StationSearchModal({ departOrArrive }: StationSearchModalProps) {
   const [searchKeyword, setSearchKeyword] = useState('');
-  const { data: stations, isError } = useStationSearchQuery(searchKeyword);
+  const { data: stations, isError: isStationSearchError } = useStationSearchQuery(searchKeyword);
+  const { data: frequentStation, isError: isFrequentStationSearchError } =
+    useFrequentStationSearchQuery();
   const closeModal = useModalStore(({ closeModal }) => closeModal);
 
   const { routeSearchPageWithParams } = useSearchRouter();
 
-  if (isError) return <></>;
+  if (isStationSearchError || isFrequentStationSearchError) return <></>;
 
   return (
     <Flex
-      gap={10}
       style={{
         position: 'fixed',
         width: '80vw',
@@ -30,21 +35,42 @@ export default function StationSearchModal({ departOrArrive }: StationSearchModa
         left: '10vw',
         backgroundColor: 'white',
         zIndex: 999,
+        overflowY: 'scroll',
       }}
-      wrap
+      vertical
     >
       <Input value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} />
-      {stations?.map((station, i) => (
-        <div
-          onClick={() => {
-            routeSearchPageWithParams({ [`${departOrArrive}Station`]: station });
-            closeModal();
-          }}
-          key={`${station}-${i}`}
-        >
-          {station}
-        </div>
-      ))}
+      <span style={{ fontSize: 20 }}>자주 찾는 역</span>
+      <Margin vertical size={10} />
+      <Flex gap={10} wrap>
+        {frequentStation?.stations.map(({ name }) => (
+          <div
+            onClick={() => {
+              routeSearchPageWithParams({ [`${departOrArrive}Station`]: name });
+              closeModal();
+            }}
+          >
+            {name}
+          </div>
+        ))}
+      </Flex>
+      <Margin vertical size={20} />
+      <span style={{ fontSize: 20 }}>전체 역</span>
+      <Margin vertical size={10} />
+      <Flex gap={10} wrap>
+        {stations?.map((station, i) => (
+          <div
+            onClick={() => {
+              routeSearchPageWithParams({ [`${departOrArrive}Station`]: station });
+              closeModal();
+            }}
+            key={`${station}-${i}`}
+          >
+            {station}
+          </div>
+        ))}
+      </Flex>
+      <Margin vertical size={20} />
       <span style={{ fontSize: 20, color: 'red' }} onClick={closeModal}>
         닫기
       </span>
