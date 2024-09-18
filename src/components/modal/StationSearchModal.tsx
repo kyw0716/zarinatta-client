@@ -7,7 +7,7 @@ import {
 import { useModalStore } from '@/hooks/use-modal-store';
 import { useSearchRouter } from '@/hooks/use-search-router';
 import { Flex, Input } from 'antd';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Margin from '../design-system/Margin';
 
 interface StationSearchModalProps {
@@ -25,6 +25,14 @@ export default function StationSearchModal({ departOrArrive }: StationSearchModa
 
   if (isStationSearchError || isFrequentStationSearchError) return <></>;
 
+  useEffect(() => {
+    window.addEventListener('click', closeModal);
+
+    return () => {
+      window.removeEventListener('click', closeModal);
+    };
+  }, []);
+
   return (
     <Flex
       style={{
@@ -38,6 +46,7 @@ export default function StationSearchModal({ departOrArrive }: StationSearchModa
         overflowY: 'scroll',
       }}
       vertical
+      onClick={(e) => e.stopPropagation()}
     >
       <Input value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} />
       <span style={{ fontSize: 20 }}>자주 찾는 역</span>

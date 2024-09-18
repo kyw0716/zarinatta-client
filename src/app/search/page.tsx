@@ -137,6 +137,7 @@ export default function SearchPage() {
                 align="center"
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   openModal(<StationSearchModal departOrArrive="depart" />);
                 }}
                 style={{
@@ -157,6 +158,7 @@ export default function SearchPage() {
                 align="center"
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   openModal(<StationSearchModal departOrArrive="arrive" />);
                 }}
                 style={{
