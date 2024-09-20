@@ -22,7 +22,7 @@ export const useFrequentStationSearchQuery = () =>
     queryFn: async () => (await searchFrequentStation()).data,
   });
 
-const searchStation = (searchKeyword?: string) =>
+export const searchStation = (searchKeyword?: string) =>
   axios.get(`${API_END_POINT}/v1/station/search?keyword=${searchKeyword ?? ''}`);
 
-const searchFrequentStation = () => axios.get(`${API_END_POINT}/v1/station/frequent`);
+export const searchFrequentStation = () => axios.get(`${API_END_POINT}/v1/station/frequent`);
