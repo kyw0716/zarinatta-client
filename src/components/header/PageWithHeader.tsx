@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { PropsWithChildren } from 'react';
 import PageNavigatorMenu from './PageNavigatorMenu';
+import LoginButton from './LoginButton';
 
 export default function PageWithHeader({ children }: PropsWithChildren) {
   return (
@@ -30,7 +31,7 @@ export default function PageWithHeader({ children }: PropsWithChildren) {
             </Link>
             <PageNavigatorMenu />
           </Flex>
-          <span>로그인</span>
+          <LoginButton />
         </Flex>
       </Header>
       <Content style={{ backgroundColor: '#f7f7f7' }}>{children}</Content>
