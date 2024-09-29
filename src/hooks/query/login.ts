@@ -1,16 +1,6 @@
 import { API_END_POINT } from '@/static/api';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-
-export const useLoginMutation = (redirect: () => void) =>
-  useMutation({
-    mutationFn: async (refreshToken: string) =>
-      (await axios.post(`${API_END_POINT}/v1/login`, { refreshToken })).data,
-    onSuccess: (data) => {
-      sessionStorage.setItem('refreshToken', data.refreshToken);
-      redirect();
-    },
-  });
 
 export const useLogoutQuery = () =>
   useQuery({
@@ -29,9 +19,12 @@ export const useLoginRedirectCodeQuery = () =>
     },
   });
 
-export const useSignUpQuery = (code: string) =>
-  useQuery({
-    queryKey: ['signupQuery'],
-    queryFn: async () =>
-      await axios.get<{ refreshToken: string }>(`${API_END_POINT}/v1/auth/signup?code=${code}`),
+export const useLoginQuery = (code: string) =>
+  useQuery<
+    { data: { refreshToken: string; userEmail: string; userNick: string } },
+    { status: number }
+  >({
+    queryKey: ['loginQuery'],
+    queryFn: async () => await axios.get(`${API_END_POINT}/v1/auth/login?code=${code}`),
+    retry: false,
   });
