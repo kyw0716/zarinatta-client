@@ -22,5 +22,5 @@ export default function LoginPage() {
     }
   }, [loginQueryData, router]);
 
-  return <div>로그인중...</div>;
+  return <div>로그인중....</div>;
 }
