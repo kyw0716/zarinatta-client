@@ -27,8 +27,8 @@ export default function SearchResultLayout({ children }: PropsWithChildren) {
           <Text type="medium-20" colorType="gray600">
             여석이 나면 문자로 알림이 발송돼요
           </Text>
+          {children}
         </Flex>
-        {children}
       </Flex>
     </main>
   );

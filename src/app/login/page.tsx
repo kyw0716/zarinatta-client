@@ -1,6 +1,6 @@
 'use client';
 
-import { useLoginQuery } from '@/hooks/query/login';
+import { useLoginQuery } from '@/hooks/query/use-login';
 import { userStore } from '@/store/userStore';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';

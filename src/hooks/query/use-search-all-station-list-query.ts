@@ -10,19 +10,19 @@ interface FrequentStationResponse {
   sections: string[];
 }
 
-export const useStationSearchQuery = (searchKeyword?: string) =>
+export const useSearchAllStationListQuery = (searchKeyword?: string) =>
   useQuery<string[]>({
     queryKey: ['stationSearchQuery', searchKeyword],
-    queryFn: async () => (await searchStation(searchKeyword)).data.stations,
+    queryFn: async () => (await searchStationList(searchKeyword)).data.stations,
   });
 
-export const useFrequentStationSearchQuery = () =>
+export const useSearchFrequentStationListQuery = () =>
   useQuery<FrequentStationResponse>({
     queryKey: ['frequentStationQuery'],
     queryFn: async () => (await searchFrequentStation()).data,
   });
 
-export const searchStation = (searchKeyword?: string) =>
+export const searchStationList = (searchKeyword?: string) =>
   axios.get(`${API_END_POINT}/v1/station/search?keyword=${searchKeyword ?? ''}`);
 
 export const searchFrequentStation = () => axios.get(`${API_END_POINT}/v1/station/frequent`);

@@ -1,9 +1,9 @@
 'use client';
 
 import {
-  useFrequentStationSearchQuery,
-  useStationSearchQuery,
-} from '@/hooks/query/use-station-search-query';
+  useSearchFrequentStationListQuery,
+  useSearchAllStationListQuery,
+} from '@/hooks/query/use-search-all-station-list-query';
 import { useModalStore } from '@/hooks/use-modal-store';
 import { useSearchRouter } from '@/hooks/use-search-router';
 import { Flex, Input } from 'antd';
@@ -16,9 +16,10 @@ interface StationSearchModalProps {
 
 export default function StationSearchModal({ departOrArrive }: StationSearchModalProps) {
   const [searchKeyword, setSearchKeyword] = useState('');
-  const { data: stations, isError: isStationSearchError } = useStationSearchQuery(searchKeyword);
+  const { data: stations, isError: isStationSearchError } =
+    useSearchAllStationListQuery(searchKeyword);
   const { data: frequentStation, isError: isFrequentStationSearchError } =
-    useFrequentStationSearchQuery();
+    useSearchFrequentStationListQuery();
   const closeModal = useModalStore(({ closeModal }) => closeModal);
 
   const { routeSearchPageWithParams } = useSearchRouter();

@@ -1,6 +1,9 @@
 'use client';
 
-import { searchFrequentStation, searchStation } from '@/hooks/query/use-station-search-query';
+import {
+  searchFrequentStation,
+  searchStationList,
+} from '@/hooks/query/use-search-all-station-list-query';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { PropsWithChildren } from 'react';
 
@@ -9,7 +12,7 @@ export const queryClient = new QueryClient();
 export const prefetchStations = async () => {
   await queryClient.prefetchQuery({
     queryKey: ['stationSearchQuery', ''],
-    queryFn: async () => (await searchStation()).data.stations,
+    queryFn: async () => (await searchStationList()).data.stations,
   });
 };
 
