@@ -11,8 +11,9 @@ export const userStore = create<{
   resetUserInfo: () => void;
 }>((set) => ({
   userInfo: {
-    userNick: undefined,
-    userEmail: undefined,
+    userNick: JSON.parse(JSON.stringify(sessionStorage.getItem('userInfo'))).userNick ?? undefined,
+    userEmail:
+      JSON.parse(JSON.stringify(sessionStorage.getItem('userInfo'))).userEmail ?? undefined,
   },
   setUserInfo: (userInfo: UserInformation) => set({ userInfo }),
   resetUserInfo: () => set({ userInfo: { userEmail: undefined, userNick: undefined } }),
