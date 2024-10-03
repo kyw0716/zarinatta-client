@@ -5,7 +5,8 @@ import axios from 'axios';
 
 export const useLogoutMutation = () =>
   useMutation({
-    mutationFn: () => fetch(`${API_END_POINT}/v1/auth/logout`, { method: 'POST' }),
+    mutationFn: () =>
+      fetch(`${API_END_POINT}/v1/auth/logout`, { method: 'POST', credentials: 'include' }),
     onSuccess: () => {
       const reset = userStore((state) => state.resetUserInfo);
       reset();
