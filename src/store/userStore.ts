@@ -14,8 +14,8 @@ export const userStore = create<{
   persist(
     (set, get) => ({
       userInfo: {
-        userNick: get().userInfo.userNick ?? undefined,
-        userEmail: get().userInfo.userEmail ?? undefined,
+        userNick: get()?.userInfo?.userNick ?? undefined,
+        userEmail: get()?.userInfo?.userEmail ?? undefined,
       },
       setUserInfo: (userInfo: UserInformation) => set({ userInfo }),
       resetUserInfo: () => set({ userInfo: { userEmail: undefined, userNick: undefined } }),
