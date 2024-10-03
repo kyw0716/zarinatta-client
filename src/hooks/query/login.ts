@@ -8,6 +8,7 @@ export const useLogoutMutation = () =>
     mutationFn: () =>
       fetch(`${API_END_POINT}/v1/auth/logout`, { method: 'POST', credentials: 'include' }),
     onSuccess: () => {
+      sessionStorage.setItem('userInfo', 'null');
       const reset = userStore((state) => state.resetUserInfo);
       reset();
     },
