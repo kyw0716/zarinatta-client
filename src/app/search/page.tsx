@@ -41,7 +41,7 @@ const stationSearchOptions: Record<'label' | 'value', Stations>[] = [
 ];
 
 const departTimeValues = Array.from({ length: 24 }).map(
-  (_, i) => `${String(i).padStart(2, '0')}00`
+  (_, i) => `${String(i).padStart(2, '0')}0000`
 );
 const departTimeLabels = Array.from({ length: 24 }).map(
   (_, i) => `${String(i).padStart(2, '0')}:00시 이후`
@@ -204,7 +204,9 @@ export default function SearchPage() {
                 variant="borderless"
                 defaultValue={searchParams['departTime']}
                 options={departTimeSearchOptions}
-                onSelect={(value) => routeSearchPageWithParams({ departTime: value })}
+                onSelect={(value) =>
+                  routeSearchPageWithParams({ departTime: `${searchParams['departDate']}${value}` })
+                }
                 style={{ borderBottom: `2px solid ${color['gray300']}` }}
               />
             }
@@ -224,11 +226,7 @@ export default function SearchPage() {
           border: 'none',
           cursor: 'pointer',
         }}
-        onClick={() =>
-          router.push(
-            `/search/result?${getSearchURLFromObject({ ...searchParams, departTime: `${searchParams['departDate']}${searchParams['departTime']}` })}`
-          )
-        }
+        onClick={() => router.push(`/search/result?${getSearchURLFromObject(searchParams)}`)}
       >
         <Text type="semiBold-20" colorType={isAllRequiredFieldSelected ? 'white' : 'primary200'}>
           열차 조회하기
