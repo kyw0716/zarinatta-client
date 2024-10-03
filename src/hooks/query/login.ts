@@ -29,6 +29,7 @@ export const useLoginQuery = (code: string) =>
     { status: number }
   >({
     queryKey: ['loginQuery'],
-    queryFn: async () => await axios.get(`${API_END_POINT}/v1/auth/login?code=${code}`),
+    queryFn: async () =>
+      await axios.get(`${API_END_POINT}/v1/auth/login?code=${code}`, { withCredentials: true }),
     retry: false,
   });
