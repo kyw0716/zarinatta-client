@@ -3,6 +3,7 @@
 import { useLoginQuery } from '@/hooks/query/login';
 import { userStore } from '@/store/userStore';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { useEffect } from 'react';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -11,13 +12,15 @@ export default function LoginPage() {
   const { data: loginQueryData } = useLoginQuery(code ?? '');
   const setUserInfo = userStore(({ setUserInfo }) => setUserInfo);
 
-  if (loginQueryData !== undefined && loginQueryData.data !== undefined) {
-    const { userEmail, userNick } = loginQueryData.data;
-    setUserInfo({ userEmail, userNick });
+  useEffect(() => {
+    if (loginQueryData !== undefined && loginQueryData.data !== undefined) {
+      const { userEmail, userNick } = loginQueryData.data;
+      setUserInfo({ userEmail, userNick });
 
-    sessionStorage.setItem('refreshToken', loginQueryData.data.refreshToken);
-    router.push(sessionStorage.getItem('pathNameBeforeClickLoginButton') ?? '/');
-  }
+      sessionStorage.setItem('refreshToken', loginQueryData.data.refreshToken);
+      router.push(sessionStorage.getItem('pathNameBeforeClickLoginButton') ?? '/');
+    }
+  }, [loginQueryData, router]);
 
   return <div>로그인중...</div>;
 }

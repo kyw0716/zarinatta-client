@@ -1,11 +1,15 @@
 import { API_END_POINT } from '@/static/api';
-import { useQuery } from '@tanstack/react-query';
+import { userStore } from '@/store/userStore';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-export const useLogoutQuery = () =>
-  useQuery({
-    queryKey: ['logout'],
-    queryFn: () => {},
+export const useLogoutMutation = () =>
+  useMutation({
+    mutationFn: () => fetch(`${API_END_POINT}/v1/auth/logout`, { method: 'POST' }),
+    onSuccess: () => {
+      const reset = userStore((state) => state.resetUserInfo);
+      reset();
+    },
   });
 
 export const useLoginRedirectCodeQuery = () =>
