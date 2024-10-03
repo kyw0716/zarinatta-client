@@ -15,7 +15,7 @@ export default function PageNavigatorMenu() {
   return (
     <Flex justify="space-between" style={{ width: 276 }}>
       <Link
-        href={`/search?departDate=${dayjs().format('YYMMDD')}`}
+        href={`/search?departDate=${dayjs().format('YYYYMMDD')}`}
         style={{ color: isSearchPage ? '#3794FA' : '#A8A8A8' }}
       >
         열차조회

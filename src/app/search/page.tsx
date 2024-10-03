@@ -112,7 +112,7 @@ export default function SearchPage() {
                 routeSearchPageWithoutParams('departDate');
                 return;
               }
-              routeSearchPageWithParams({ departDate: dayjs().date(date).format('YYMMDD') });
+              routeSearchPageWithParams({ departDate: dayjs().date(date).format('YYYYMMDD') });
             }}
             startMonth={currentMonth as Month}
           />
@@ -129,7 +129,7 @@ export default function SearchPage() {
                 departDate: dayjs()
                   .month(nextMonth - 1)
                   .date(date)
-                  .format('YYMMDD'),
+                  .format('YYYYMMDD'),
               });
             }}
             startMonth={nextMonth as Month}
