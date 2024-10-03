@@ -57,8 +57,8 @@ const departTimeSearchOptions: Record<
 export default function SearchPage() {
   const router = useRouter();
   const searchParams = getSearchParamsObject(useSearchParams());
-  const month = Number(searchParams['departDate']?.slice(2, 4));
-  const date = Number(searchParams['departDate']?.slice(4));
+  const month = Number(searchParams['departDate']?.slice(4, 6));
+  const date = Number(searchParams['departDate']?.slice(6));
   const isAllRequiredFieldSelected = coreSearchParamKeys.every((key) =>
     Object.keys(searchParams).includes(key)
   );
