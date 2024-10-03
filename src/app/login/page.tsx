@@ -18,7 +18,6 @@ export default function LoginPage() {
       setUserInfo({ userEmail, userNick });
 
       sessionStorage.setItem('refreshToken', loginQueryData.data.refreshToken);
-      sessionStorage.setItem('userInfo', JSON.stringify({ userNick, userEmail }));
       router.push(sessionStorage.getItem('pathNameBeforeClickLoginButton') ?? '/');
     }
   }, [loginQueryData, router]);

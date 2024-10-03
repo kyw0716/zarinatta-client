@@ -3,7 +3,6 @@
 import { useLoginRedirectCodeQuery, useLogoutMutation } from '@/hooks/query/use-login';
 import { userStore } from '@/store/userStore';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
 
 export default function LoginButton() {
   const router = useRouter();
@@ -24,12 +23,6 @@ export default function LoginButton() {
     logoutMutation();
     resetUserInfo();
   };
-
-  useEffect(() => {
-    const userInfo = JSON.parse(JSON.stringify(sessionStorage.getItem('userInfo')));
-    console.log(userInfo);
-    if (userInfo !== null) setUserInfo(userInfo);
-  }, []);
 
   if (userInformation.userEmail !== undefined && userInformation.userNick !== undefined)
     return <span onClick={logout}>로그아웃</span>;
