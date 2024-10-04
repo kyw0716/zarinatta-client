@@ -7,6 +7,7 @@ export const useCreateBookmarkMutation = () =>
     mutationFn: (requestParams: BookmarkRequestParams) =>
       fetch(`${API_END_POINT}/v1/bookmark/create`, {
         method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestParams),
         credentials: 'include',
       }),
