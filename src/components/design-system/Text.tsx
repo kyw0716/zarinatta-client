@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { CSSProperties, ReactNode } from 'react';
 import { ColorType, color } from './Color';
 
 type TextType =
@@ -21,6 +21,8 @@ interface TextProps {
   children: ReactNode;
   type?: TextType;
   colorType?: ColorType | 'white';
+  style?: CSSProperties;
+  onClick?: () => void;
 }
 
 const FONT_WEIGHT = {
@@ -30,7 +32,13 @@ const FONT_WEIGHT = {
   bold: 700,
 };
 
-export default function Text({ type = 'regular-14', children, colorType = 'gray950' }: TextProps) {
+export default function Text({
+  type = 'regular-14',
+  children,
+  colorType = 'gray950',
+  style,
+  onClick,
+}: TextProps) {
   const [weight, size] = type.split('-');
 
   return (
@@ -39,7 +47,9 @@ export default function Text({ type = 'regular-14', children, colorType = 'gray9
         fontWeight: FONT_WEIGHT[weight as keyof typeof FONT_WEIGHT],
         fontSize: `${size}px`,
         color: colorType === 'white' ? 'white' : color[colorType],
+        ...style,
       }}
+      onClick={onClick}
     >
       {children}
     </span>

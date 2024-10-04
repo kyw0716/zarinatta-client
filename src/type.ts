@@ -27,3 +27,12 @@ export interface BookmarkRequestParams {
   wantBabySeat: SeatVariation;
   wantWaitingReservation: boolean;
 }
+
+export interface Bookmark extends Ticket, BookmarkRequestParams {
+  departDate: string;
+  bookmarkId: number;
+}
+
+export interface BookmarkResponse extends PaginationResponse {
+  responseList: Bookmark[];
+}

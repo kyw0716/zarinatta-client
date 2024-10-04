@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Flex, Select } from 'antd';
 import DatePicker, { Month } from '@/components/date-picker/DatePicker';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import dayjs from 'dayjs';
 import Margin from '@/components/design-system/Margin';
 import Text from '@/components/design-system/Text';
@@ -18,10 +18,6 @@ import { useSearchRouter } from '@/hooks/use-search-router';
 import { useRouter } from 'next/navigation';
 import { useModalStore } from '@/hooks/use-modal-store';
 import StationSearchModal from '@/components/modal/StationSearchModal';
-import {
-  prefetchFrequentStations,
-  prefetchStations,
-} from '@/components/query-provider/query-provider';
 
 type Stations = 'KTX' | 'SRT' | 'ITX';
 
@@ -86,11 +82,6 @@ export default function SearchPage() {
     setNextMonthSelectedDate(date);
     setCurrentMonthSelectedDate(-1);
   };
-
-  useEffect(() => {
-    prefetchStations();
-    prefetchFrequentStations();
-  }, []);
 
   return (
     <Flex vertical align="center">
