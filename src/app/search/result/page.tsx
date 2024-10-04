@@ -11,7 +11,7 @@ export default function SearchResultPage() {
   const { data, isLoading } = useSearchStationByDate(searchURL);
   const { mutate: createBookmark } = useCreateBookmarkMutation();
 
-  if (isLoading) return <div>로딩중</div>;
+  if (isLoading) return <div>로딩중...</div>;
 
   return (
     <div>
