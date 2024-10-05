@@ -36,3 +36,8 @@ export interface Bookmark extends Ticket, BookmarkRequestParams {
 export interface BookmarkResponse extends PaginationResponse {
   responseList: Bookmark[];
 }
+
+export interface BookmarkedTicket {
+  bookmarkId: number;
+  ticketId: number;
+}

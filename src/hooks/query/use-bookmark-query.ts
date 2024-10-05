@@ -1,5 +1,5 @@
 import { API_END_POINT } from '@/static/api';
-import { BookmarkResponse } from '@/type';
+import { BookmarkResponse, BookmarkedTicket } from '@/type';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
@@ -17,14 +17,14 @@ export const useBookmarkQuery = (expire: boolean) =>
 
 export const useDeleteBookmarkMutation = (refetchBookmark: () => void) =>
   useMutation({
-    mutationFn: (bookmarkId: number) =>
+    mutationFn: (bookmarkId?: number) =>
       axios.delete(`${API_END_POINT}/v1/bookmark/delete/${bookmarkId}`, { withCredentials: true }),
     onSuccess: refetchBookmark,
   });
 
-export const useIsBookmarkedQuery = (ticketIds?: number[]) =>
-  useQuery({
-    queryKey: ['isBookmarkedQuery', ticketIds],
+export const useBookmarkedTicketListQuery = (ticketIds?: number[]) =>
+  useQuery<BookmarkedTicket[]>({
+    queryKey: ['bookmarkedTicketListQuery', ticketIds],
     queryFn: async () => {
       if (ticketIds === undefined) return [];
       return (

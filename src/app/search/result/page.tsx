@@ -5,20 +5,31 @@ import { getSearchParamsObject, getSearchURLFromObject } from '@/utils/search-pa
 import { Flex } from 'antd';
 import { useSearchParams } from 'next/navigation';
 import { useCreateBookmarkMutation } from '../../../hooks/query/use-create-bookmark';
-import { useIsBookmarkedQuery } from '@/hooks/query/use-bookmark-query';
+import {
+  useDeleteBookmarkMutation,
+  useBookmarkedTicketListQuery,
+} from '@/hooks/query/use-bookmark-query';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function SearchResultPage() {
   const searchURL = getSearchURLFromObject(getSearchParamsObject(useSearchParams()));
   const queryClient = useQueryClient();
   const { data: searchedStations } = useSearchStationByDate(searchURL);
-  const { data: isBookmarkedList } = useIsBookmarkedQuery(
+  const { data: bookmarkedTicketList } = useBookmarkedTicketListQuery(
     searchedStations?.responseList.map(({ ticketId }) => ticketId)
   );
   const { mutate: createBookmark } = useCreateBookmarkMutation(() =>
     queryClient.invalidateQueries({
       queryKey: [
-        'isBookmarkedQuery',
+        'bookmarkedTicketListQuery',
+        searchedStations?.responseList.map(({ ticketId }) => ticketId),
+      ],
+    })
+  );
+  const { mutate: deleteBookmark } = useDeleteBookmarkMutation(() =>
+    queryClient.invalidateQueries({
+      queryKey: [
+        'bookmarkedTicketListQuery',
         searchedStations?.responseList.map(({ ticketId }) => ticketId),
       ],
     })
@@ -28,7 +39,8 @@ export default function SearchResultPage() {
     <div>
       {searchedStations?.responseList.map(
         ({ arriveStation, arriveTime, departStation, departTime, ticketId, ticketType }) => {
-          const isBookmarked = isBookmarkedList?.includes(ticketId);
+          const isBookmarked =
+            bookmarkedTicketList?.find(({ ticketId: t }) => t === ticketId) !== undefined;
           return (
             <Flex key={ticketId} gap={30}>
               <span>{ticketType}</span>
@@ -37,18 +49,21 @@ export default function SearchResultPage() {
               <span>{departStation}</span>
               <span>{arriveStation}</span>
               <button
-                disabled={isBookmarked}
                 onClick={() =>
-                  createBookmark({
-                    ticketId,
-                    wantBabySeat: 'SEAT',
-                    wantFirstClass: true,
-                    wantNormalSeat: 'SEAT',
-                    wantWaitingReservation: true,
-                  })
+                  isBookmarked
+                    ? deleteBookmark(
+                        bookmarkedTicketList?.find(({ ticketId: t }) => t === ticketId)?.bookmarkId
+                      )
+                    : createBookmark({
+                        ticketId,
+                        wantBabySeat: 'SEAT',
+                        wantFirstClass: true,
+                        wantNormalSeat: 'SEAT',
+                        wantWaitingReservation: true,
+                      })
                 }
               >
-                {isBookmarked ? '이미 즐겨찾기 함' : '즐겨찾기 버튼'}
+                {isBookmarked ? '즐겨찾기 삭제' : '즐겨찾기 버튼'}
               </button>
             </Flex>
           );
