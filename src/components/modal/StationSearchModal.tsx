@@ -101,7 +101,13 @@ export default function StationSearchModal({ departOrArrive }: StationSearchModa
           <Flex gap={8} wrap>
             {frequentStation?.stations.map(({ name }) => (
               <Flex
-                style={{ width: 95, height: 26, borderRadius: 4, backgroundColor: color['gray50'] }}
+                style={{
+                  width: 95,
+                  height: 26,
+                  borderRadius: 4,
+                  backgroundColor: color['gray50'],
+                  cursor: 'pointer',
+                }}
                 align="center"
                 justify="center"
                 onClick={() => {
