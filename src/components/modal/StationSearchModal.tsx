@@ -9,6 +9,9 @@ import { useSearchRouter } from '@/hooks/use-search-router';
 import { Flex, Input } from 'antd';
 import { useEffect, useState } from 'react';
 import Margin from '../design-system/Margin';
+import Image from 'next/image';
+import Text from '../design-system/Text';
+import { color } from '../design-system/Color';
 
 interface StationSearchModalProps {
   departOrArrive: 'depart' | 'arrive';
@@ -35,55 +38,121 @@ export default function StationSearchModal({ departOrArrive }: StationSearchModa
   }, []);
 
   return (
-    <Flex
-      style={{
-        position: 'fixed',
-        width: '80vw',
-        height: '80vh',
-        top: '10vh',
-        left: '10vw',
-        backgroundColor: 'white',
-        zIndex: 999,
-        overflowY: 'scroll',
-      }}
-      vertical
-      onClick={(e) => e.stopPropagation()}
-    >
-      <Input value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} />
-      <span style={{ fontSize: 20 }}>자주 찾는 역</span>
-      <Margin vertical size={10} />
-      <Flex gap={10} wrap>
-        {frequentStation?.stations.map(({ name }) => (
-          <div
-            onClick={() => {
-              routeSearchPageWithParams({ [`${departOrArrive}Station`]: name });
-              closeModal();
+    <>
+      <div
+        style={{
+          width: '100vw',
+          height: '100vh',
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          backgroundColor: '#00000066',
+        }}
+      />
+      <Flex
+        style={{
+          position: 'fixed',
+          width: '800px',
+          height: '700px',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          backgroundColor: 'white',
+          zIndex: 999,
+          overflowY: 'scroll',
+          padding: '41px 0',
+          borderRadius: 8,
+        }}
+        vertical
+        align="center"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <Image alt="위치 이모지" src={'/location.svg'} width={43} height={52.5} />
+        <Margin vertical size={24} />
+        <Flex style={{ position: 'relative' }}>
+          <Input
+            placeholder="기차역을 검색해주세요."
+            style={{ width: 650, height: 52, backgroundColor: '#F7F7F7' }}
+            value={searchKeyword}
+            onChange={(e) => setSearchKeyword(e.target.value)}
+          />
+          <Image
+            style={{ position: 'absolute', top: 15.5, right: 15.5, cursor: 'pointer' }}
+            src={'/magnifyingGlass.svg'}
+            alt="돋보기 아이콘"
+            width={21}
+            height={21}
+          />
+        </Flex>
+        <Margin vertical size={28} />
+        <Flex vertical style={{ width: 650 }}>
+          <Text
+            type="semiBold-16"
+            colorType="gray950"
+            style={{
+              borderBottom: `2px solid ${color['primary500']}`,
+              lineHeight: '24px',
+              width: 133,
             }}
           >
-            {name}
-          </div>
-        ))}
-      </Flex>
-      <Margin vertical size={20} />
-      <span style={{ fontSize: 20 }}>전체 역</span>
-      <Margin vertical size={10} />
-      <Flex gap={10} wrap>
-        {stations?.map((station, i) => (
-          <div
-            onClick={() => {
-              routeSearchPageWithParams({ [`${departOrArrive}Station`]: station });
-              closeModal();
+            많이 이용하는 기차역
+          </Text>
+          <Margin vertical size={16} />
+          <Flex gap={8} wrap>
+            {frequentStation?.stations.map(({ name }) => (
+              <Flex
+                style={{ width: 95, height: 26, borderRadius: 4, backgroundColor: color['gray50'] }}
+                align="center"
+                justify="center"
+                onClick={() => {
+                  routeSearchPageWithParams({ [`${departOrArrive}Station`]: name });
+                  closeModal();
+                }}
+              >
+                <Text type="medium-13" colorType="gray950">
+                  {name}
+                </Text>
+              </Flex>
+            ))}
+          </Flex>
+          <Margin vertical size={24} />
+          <Text
+            type="semiBold-16"
+            colorType="gray950"
+            style={{
+              borderBottom: `2px solid ${color['primary500']}`,
+              lineHeight: '24px',
+              width: 76,
             }}
-            key={`${station}-${i}`}
           >
-            {station}
-          </div>
-        ))}
+            모든 정차역
+          </Text>
+          <Margin vertical size={12} />
+          <Flex gap={12} wrap>
+            {stations?.map((station, i) => (
+              <Text
+                key={`${station}-${i}`}
+                style={{
+                  width: 120,
+                  height: 37,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  cursor: 'pointer',
+                }}
+                type="regular-14"
+                colorType="gray950"
+                onClick={() => {
+                  routeSearchPageWithParams({ [`${departOrArrive}Station`]: station });
+                  closeModal();
+                }}
+              >
+                {station}
+              </Text>
+            ))}
+          </Flex>
+        </Flex>
       </Flex>
-      <Margin vertical size={20} />
-      <span style={{ fontSize: 20, color: 'red' }} onClick={closeModal}>
-        닫기
-      </span>
-    </Flex>
+    </>
   );
 }
