@@ -19,6 +19,8 @@ interface StationSearchModalProps {
 
 export default function StationSearchModal({ departOrArrive }: StationSearchModalProps) {
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [hoveredStation, setHoveredStation] = useState('');
+  const [clickedStation, setClickedStation] = useState('');
   const { data: stations, isError: isStationSearchError } =
     useSearchAllStationListQuery(searchKeyword);
   const { data: allStations } = useSearchAllStationListQuery('');
@@ -138,25 +140,41 @@ export default function StationSearchModal({ departOrArrive }: StationSearchModa
             <Margin vertical size={12} />
             <Flex gap={12} wrap>
               {allStations?.map((station, i) => (
-                <Text
-                  key={`${station}-${i}`}
-                  style={{
-                    width: 120,
-                    height: 37,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    cursor: 'pointer',
+                <Flex
+                  onMouseEnter={() => {
+                    setHoveredStation(station);
                   }}
-                  type="regular-14"
-                  colorType="gray950"
-                  onClick={() => {
-                    routeSearchPageWithParams({ [`${departOrArrive}Station`]: station });
-                    closeModal();
+                  onMouseLeave={() => {
+                    setHoveredStation('');
+                    setClickedStation('');
+                  }}
+                  onMouseDown={() => {
+                    setHoveredStation('');
+                    setClickedStation(station);
                   }}
                 >
-                  {station}
-                </Text>
+                  <Text
+                    key={`${station}-${i}`}
+                    style={{
+                      width: 120,
+                      height: 37,
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      backgroundColor: hoveredStation === station ? color['gray50'] : '',
+                      borderRadius: 8,
+                    }}
+                    type="regular-14"
+                    colorType={clickedStation === station ? 'primary500' : 'gray950'}
+                    onClick={() => {
+                      routeSearchPageWithParams({ [`${departOrArrive}Station`]: station });
+                      closeModal();
+                    }}
+                  >
+                    {station}
+                  </Text>
+                </Flex>
               ))}
             </Flex>
           </Flex>
@@ -164,7 +182,12 @@ export default function StationSearchModal({ departOrArrive }: StationSearchModa
           <Flex vertical>
             {stations?.map((station, i) => (
               <Flex
-                style={{ width: 650, height: 43, padding: 8, cursor: 'pointer' }}
+                style={{
+                  width: 650,
+                  height: 43,
+                  padding: 8,
+                  cursor: 'pointer',
+                }}
                 gap={16}
                 align="center"
                 onClick={() => {
