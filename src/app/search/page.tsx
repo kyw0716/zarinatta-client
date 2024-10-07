@@ -37,7 +37,7 @@ const stationSearchOptions: Record<'label' | 'value', Stations>[] = [
 ];
 
 const departTimeValues = Array.from({ length: 24 }).map(
-  (_, i) => `${String(i).padStart(2, '0')}0000`
+  (_, i) => `${String(i).padStart(2, '0')}00`
 );
 const departTimeLabels = Array.from({ length: 24 }).map(
   (_, i) => `${String(i).padStart(2, '0')}:00시 이후`
@@ -195,9 +195,7 @@ export default function SearchPage() {
                 variant="borderless"
                 defaultValue={searchParams['departTime']}
                 options={departTimeSearchOptions}
-                onSelect={(value) =>
-                  routeSearchPageWithParams({ departTime: `${searchParams['departDate']}${value}` })
-                }
+                onSelect={(value) => routeSearchPageWithParams({ departTime: value })}
                 style={{ borderBottom: `2px solid ${color['gray300']}` }}
               />
             }
