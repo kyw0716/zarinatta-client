@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { Flex, Select } from 'antd';
 import DatePicker, { Month } from '@/components/date-picker/DatePicker';
-import { useState } from 'react';
+import { CSSProperties, useState } from 'react';
 import dayjs from 'dayjs';
 import Margin from '@/components/design-system/Margin';
 import Text from '@/components/design-system/Text';
@@ -236,6 +236,7 @@ const SearchMenu = ({
   icon: 'start-station' | 'end-station' | 'clock' | 'train';
   title: string;
   selectComponent: JSX.Element;
+  style?: CSSProperties;
 }) => {
   return (
     <Flex
@@ -247,6 +248,7 @@ const SearchMenu = ({
         padding: '28px 20px',
         backgroundColor: 'white',
         borderRadius: 20,
+        cursor: 'pointer',
       }}
     >
       <Image src={`/${icon}.svg`} alt="검색 메뉴 아이콘" width={106} height={106} />
