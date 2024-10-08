@@ -5,7 +5,7 @@ import axios from 'axios';
 
 export const useSearchStationByDate = (searchParams: string) =>
   useQuery<SearchStationResponse>({
-    queryKey: ['searchStationByDate'],
+    queryKey: ['searchStationByDate', searchParams],
     queryFn: async () =>
       (await axios.get(`${API_END_POINT}/v1/ticket/search?${searchParams}`)).data,
   });

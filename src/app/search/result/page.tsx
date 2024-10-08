@@ -13,6 +13,10 @@ import { UseMutateFunction, useQueryClient } from '@tanstack/react-query';
 import { BookmarkRequestParams, TicketTableColumns } from '@/type';
 import Image from 'next/image';
 import { AxiosResponse } from 'axios';
+import Margin from '@/components/design-system/Margin';
+import { color } from '@/components/design-system/Color';
+import Text from '@/components/design-system/Text';
+import { useSearchRouter } from '@/hooks/use-search-router';
 
 const getColumns = (
   createBookmark: UseMutateFunction<AxiosResponse<any, any>, Error, BookmarkRequestParams, unknown>,
@@ -84,8 +88,37 @@ const getColumns = (
   return columns;
 };
 
+interface TrainSearchButtonProps {
+  isSelected: boolean;
+  handleClick: () => void;
+  content: string;
+}
+
+const TrainSearchButton = ({ isSelected, handleClick, content }: TrainSearchButtonProps) => {
+  return (
+    <Flex
+      style={{
+        width: 100,
+        height: 40,
+        borderRadius: 8,
+        cursor: 'pointer',
+        backgroundColor: isSelected ? color['primary500'] : 'white',
+      }}
+      justify="center"
+      align="center"
+      onClick={handleClick}
+    >
+      <Text type="semiBold-16" colorType={isSelected ? 'white' : 'gray900'}>
+        {content}
+      </Text>
+    </Flex>
+  );
+};
+
 export default function SearchResultPage() {
-  const searchURL = getSearchURLFromObject(getSearchParamsObject(useSearchParams()));
+  const searchParams = useSearchParams();
+  const searchURL = getSearchURLFromObject(getSearchParamsObject(searchParams));
+
   const queryClient = useQueryClient();
   const { data: searchedStations } = useSearchStationByDate(searchURL);
   const { data: bookmarkedTicketList } = useBookmarkedTicketListQuery(
@@ -108,8 +141,34 @@ export default function SearchResultPage() {
     })
   );
 
+  const { routeSearchResultPageWithParams, routeSearchResultPageWithoutParams } = useSearchRouter();
+
   return (
-    <Flex>
+    <Flex vertical>
+      <Margin vertical size={44} />
+      <Flex gap={16}>
+        <TrainSearchButton
+          isSelected={searchParams.get('trainType') === null}
+          handleClick={() => routeSearchResultPageWithoutParams('trainType')}
+          content="전체 열차"
+        />
+        <TrainSearchButton
+          isSelected={searchParams.get('trainType') === 'KTX'}
+          handleClick={() => routeSearchResultPageWithParams({ trainType: 'KTX' })}
+          content="KTX"
+        />
+        <TrainSearchButton
+          isSelected={searchParams.get('trainType') === 'ITX'}
+          handleClick={() => routeSearchResultPageWithParams({ trainType: 'ITX' })}
+          content="ITX"
+        />
+        <TrainSearchButton
+          isSelected={searchParams.get('trainType') === 'SRT'}
+          handleClick={() => routeSearchResultPageWithParams({ trainType: 'SRT' })}
+          content="SRT"
+        />
+      </Flex>
+      <Margin vertical size={28} />
       <Table
         style={{ width: 1140 }}
         columns={getColumns(createBookmark, deleteBookmark)}

@@ -21,6 +21,26 @@ export const useSearchRouter = () => {
       scroll: false,
     });
   };
+  const routeSearchResultPageWithParams = (params: Record<string, string | number>) => {
+    router.push(`/search/result?${getSearchURLFromObject({ ...searchParams, ...params })}`, {
+      scroll: false,
+    });
+  };
+  const routeSearchResultPageWithoutParams = (params: string[] | string) => {
+    const deleteKeys = Array.isArray(params) ? params : [params];
+    const clonedSearchParams = cloneDeep(searchParams);
 
-  return { routeSearchPageWithParams, routeSearchPageWithoutParams };
+    deleteKeys.forEach((key) => delete clonedSearchParams[key]);
+
+    router.push(`/search/result?${getSearchURLFromObject({ ...clonedSearchParams })}`, {
+      scroll: false,
+    });
+  };
+
+  return {
+    routeSearchPageWithParams,
+    routeSearchPageWithoutParams,
+    routeSearchResultPageWithParams,
+    routeSearchResultPageWithoutParams,
+  };
 };
