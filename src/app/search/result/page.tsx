@@ -18,6 +18,16 @@ import { color } from '@/components/design-system/Color';
 import Text from '@/components/design-system/Text';
 import { useSearchRouter } from '@/hooks/use-search-router';
 
+const TrainTypeLabel = ({ text }: { text: string }) => {
+  return (
+    <Flex
+      style={{ padding: '4px 12px', backgroundColor: color['gray50'], color: color['gray950'] }}
+    >
+      {text}
+    </Flex>
+  );
+};
+
 const getColumns = (
   createBookmark: UseMutateFunction<AxiosResponse<any, any>, Error, BookmarkRequestParams, unknown>,
   deleteBookmark: UseMutateFunction<AxiosResponse<any, any>, Error, number | undefined, unknown>
@@ -27,6 +37,17 @@ const getColumns = (
       title: '열차종류',
       dataIndex: 'ticketType',
       key: 'ticketType',
+      width: 356,
+      render: (_, { ticketType }) => {
+        const [trainName, trainNumber] = ticketType.split(' ');
+
+        return (
+          <Flex gap={6}>
+            <TrainTypeLabel text={trainName} />
+            <TrainTypeLabel text={trainNumber} />
+          </Flex>
+        );
+      },
     },
     {
       title: '출발시간',
@@ -180,7 +201,7 @@ export default function SearchResultPage() {
             bookmarkedTicketList?.find(({ ticketId }) => ticketId === station.ticketId)
               ?.bookmarkId ?? null,
         }))}
-        pagination={{ position: ['none'] }}
+        pagination={{ position: ['none', 'bottomCenter'] }}
       />
     </Flex>
   );

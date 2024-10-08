@@ -7,5 +7,5 @@ export const useSearchStationByDate = (searchParams: string) =>
   useQuery<SearchStationResponse>({
     queryKey: ['searchStationByDate', searchParams],
     queryFn: async () =>
-      (await axios.get(`${API_END_POINT}/v1/ticket/search?${searchParams}`)).data,
+      (await axios.get(`${API_END_POINT}/v1/ticket/search?${searchParams}&size=30&page=0`)).data,
   });
