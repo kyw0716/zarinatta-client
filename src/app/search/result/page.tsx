@@ -2,14 +2,85 @@
 
 import { useSearchStationByDate } from '@/hooks/query/use-search-station-by-date-query';
 import { getSearchParamsObject, getSearchURLFromObject } from '@/utils/search-params';
-import { Flex } from 'antd';
+import { Flex, Table, TableProps } from 'antd';
 import { useSearchParams } from 'next/navigation';
 import { useCreateBookmarkMutation } from '../../../hooks/query/use-create-bookmark';
 import {
   useDeleteBookmarkMutation,
   useBookmarkedTicketListQuery,
 } from '@/hooks/query/use-bookmark-query';
-import { useQueryClient } from '@tanstack/react-query';
+import { UseMutateFunction, useQueryClient } from '@tanstack/react-query';
+import { BookmarkRequestParams, TicketTableColumns } from '@/type';
+import Image from 'next/image';
+import { AxiosResponse } from 'axios';
+
+const getColumns = (
+  createBookmark: UseMutateFunction<AxiosResponse<any, any>, Error, BookmarkRequestParams, unknown>,
+  deleteBookmark: UseMutateFunction<AxiosResponse<any, any>, Error, number | undefined, unknown>
+) => {
+  const columns: TableProps<TicketTableColumns>['columns'] = [
+    {
+      title: '열차종류',
+      dataIndex: 'ticketType',
+      key: 'ticketType',
+    },
+    {
+      title: '출발시간',
+      dataIndex: 'departTime',
+      key: 'departTime',
+    },
+    {
+      title: '도착시간',
+      dataIndex: 'arriveTime',
+      key: 'arriveTime',
+    },
+    {
+      title: '출발역',
+      dataIndex: 'departStation',
+      key: 'departStation',
+    },
+    {
+      title: '도착역',
+      dataIndex: 'arriveStation',
+      key: 'arriveStation',
+    },
+    {
+      dataIndex: 'bookmarkId',
+      key: 'bookmarkId',
+      render: (_, { bookmarkId, ticketId }) => {
+        if (bookmarkId !== null)
+          return (
+            <Image
+              src={'/filled-star.svg'}
+              alt="이미 북마크 된 티켓 이모지"
+              width={26}
+              height={25}
+              onClick={() => deleteBookmark(bookmarkId)}
+            />
+          );
+        return (
+          <Image
+            src={'/empty-star.svg'}
+            alt="아직 북마크 안된 티켓 이모지"
+            width={26}
+            height={25}
+            onClick={() =>
+              createBookmark({
+                ticketId: ticketId,
+                wantBabySeat: 'SEAT',
+                wantFirstClass: true,
+                wantNormalSeat: 'SEAT',
+                wantWaitingReservation: true,
+              })
+            }
+          />
+        );
+      },
+    },
+  ];
+
+  return columns;
+};
 
 export default function SearchResultPage() {
   const searchURL = getSearchURLFromObject(getSearchParamsObject(useSearchParams()));
@@ -36,39 +107,20 @@ export default function SearchResultPage() {
   );
 
   return (
-    <div>
-      {searchedStations?.responseList.map(
-        ({ arriveStation, arriveTime, departStation, departTime, ticketId, ticketType }) => {
-          const isBookmarked =
-            bookmarkedTicketList?.find(({ ticketId: t }) => t === ticketId) !== undefined;
-          return (
-            <Flex key={ticketId} gap={30}>
-              <span>{ticketType}</span>
-              <span>{departTime}</span>
-              <span>{arriveTime}</span>
-              <span>{departStation}</span>
-              <span>{arriveStation}</span>
-              <button
-                onClick={() =>
-                  isBookmarked
-                    ? deleteBookmark(
-                        bookmarkedTicketList?.find(({ ticketId: t }) => t === ticketId)?.bookmarkId
-                      )
-                    : createBookmark({
-                        ticketId,
-                        wantBabySeat: 'SEAT',
-                        wantFirstClass: true,
-                        wantNormalSeat: 'SEAT',
-                        wantWaitingReservation: true,
-                      })
-                }
-              >
-                {isBookmarked ? '즐겨찾기 삭제' : '즐겨찾기 버튼'}
-              </button>
-            </Flex>
-          );
-        }
-      )}
-    </div>
+    <Flex>
+      <Table
+        style={{ width: 1140 }}
+        columns={getColumns(createBookmark, deleteBookmark)}
+        dataSource={searchedStations?.responseList.map((station) => ({
+          ...station,
+          departTime: `${station.departTime.slice(8, 10)}:${station.departTime.slice(10, 12)}`,
+          arriveTime: `${station.arriveTime.slice(8, 10)}:${station.arriveTime.slice(10, 12)}`,
+          bookmarkId:
+            bookmarkedTicketList?.find(({ ticketId }) => ticketId === station.ticketId)
+              ?.bookmarkId ?? null,
+        }))}
+        pagination={{ position: ['none'] }}
+      />
+    </Flex>
   );
 }

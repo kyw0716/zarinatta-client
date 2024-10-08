@@ -14,6 +14,10 @@ export interface Ticket {
   price: string;
 }
 
+export interface TicketTableColumns extends Omit<Ticket, 'price'> {
+  bookmarkId: number | null;
+}
+
 export interface SearchStationResponse extends PaginationResponse {
   responseList: Ticket[];
 }
