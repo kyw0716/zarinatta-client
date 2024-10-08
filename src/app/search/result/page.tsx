@@ -56,6 +56,7 @@ const getColumns = (
               width={26}
               height={25}
               onClick={() => deleteBookmark(bookmarkId)}
+              style={{ cursor: 'pointer' }}
             />
           );
         return (
@@ -73,6 +74,7 @@ const getColumns = (
                 wantWaitingReservation: true,
               })
             }
+            style={{ cursor: 'pointer' }}
           />
         );
       },
