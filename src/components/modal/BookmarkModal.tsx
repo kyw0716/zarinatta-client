@@ -4,7 +4,6 @@ import { ReactNode, useState } from 'react';
 import Text from '../design-system/Text';
 import Margin from '../design-system/Margin';
 import { color } from '../design-system/Color';
-import { TrainTypeLabel } from '@/app/search/result/page';
 import { useModalStore } from '@/hooks/use-modal-store';
 import { useCreateBookmarkMutation } from '@/hooks/query/use-create-bookmark';
 import { getSearchParamsObject, getSearchURLFromObject } from '@/utils/search-params';
@@ -13,6 +12,7 @@ import { useSearchStationByDate } from '@/hooks/query/use-search-station-by-date
 import { UseMutateFunction, useQueryClient } from '@tanstack/react-query';
 import { AxiosResponse } from 'axios';
 import Image from 'next/image';
+import { TrainTypeChip } from '../chip/TrainTypeChip';
 
 interface BookmarkModalProps {
   ticket: TicketTableColumns;
@@ -112,8 +112,8 @@ const ConfirmTicketInformation = ({
           label="열차 정보"
           content={
             <Flex gap={6}>
-              <TrainTypeLabel text={ticket.ticketType.split(' ')[0]} />
-              <TrainTypeLabel text={ticket.ticketType.split(' ')[1]} />
+              <TrainTypeChip text={ticket.ticketType.split(' ')[0]} />
+              <TrainTypeChip text={ticket.ticketType.split(' ')[1]} />
             </Flex>
           }
         />

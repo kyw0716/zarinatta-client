@@ -10,7 +10,7 @@ import {
   useBookmarkedTicketListQuery,
 } from '@/hooks/query/use-bookmark-query';
 import { UseMutateFunction, useQueryClient } from '@tanstack/react-query';
-import { BookmarkRequestParams, TicketTableColumns } from '@/type';
+import { TicketTableColumns } from '@/type';
 import Image from 'next/image';
 import { AxiosResponse } from 'axios';
 import Margin from '@/components/design-system/Margin';
@@ -20,19 +20,9 @@ import { useSearchRouter } from '@/hooks/use-search-router';
 import { useModalStore } from '@/hooks/use-modal-store';
 import { ReactNode } from 'react';
 import BookmarkModal from '@/components/modal/BookmarkModal';
-
-export const TrainTypeLabel = ({ text }: { text: string }) => {
-  return (
-    <Flex
-      style={{ padding: '4px 12px', backgroundColor: color['gray50'], color: color['gray950'] }}
-    >
-      {text}
-    </Flex>
-  );
-};
+import { TrainTypeChip } from '@/components/chip/TrainTypeChip';
 
 const getColumns = (
-  createBookmark: UseMutateFunction<AxiosResponse<any, any>, Error, BookmarkRequestParams, unknown>,
   deleteBookmark: UseMutateFunction<AxiosResponse<any, any>, Error, number | undefined, unknown>,
   openModal: (content: ReactNode) => void,
   departDate: string
@@ -48,8 +38,8 @@ const getColumns = (
 
         return (
           <Flex gap={6}>
-            <TrainTypeLabel text={trainName} />
-            <TrainTypeLabel text={trainNumber} />
+            <TrainTypeChip text={trainName} />
+            <TrainTypeChip text={trainNumber} />
           </Flex>
         );
       },
@@ -196,12 +186,7 @@ export default function SearchResultPage() {
       <Margin vertical size={28} />
       <Table
         style={{ width: 1140 }}
-        columns={getColumns(
-          createBookmark,
-          deleteBookmark,
-          openModal,
-          searchParams.get('departDate') ?? ''
-        )}
+        columns={getColumns(deleteBookmark, openModal, searchParams.get('departDate') ?? '')}
         dataSource={searchedStations?.responseList.map((station) => ({
           ...station,
           departTime: `${station.departTime.slice(8, 10)}:${station.departTime.slice(10, 12)}`,

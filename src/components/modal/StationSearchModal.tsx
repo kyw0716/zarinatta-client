@@ -30,8 +30,6 @@ export default function StationSearchModal({ departOrArrive }: StationSearchModa
 
   const { routeSearchPageWithParams } = useSearchRouter();
 
-  if (isStationSearchError || isFrequentStationSearchError) return <></>;
-
   useEffect(() => {
     window.addEventListener('click', closeModal);
 
@@ -39,6 +37,8 @@ export default function StationSearchModal({ departOrArrive }: StationSearchModa
       window.removeEventListener('click', closeModal);
     };
   }, []);
+
+  if (isStationSearchError || isFrequentStationSearchError) return <></>;
 
   return (
     <Flex
@@ -94,6 +94,7 @@ export default function StationSearchModal({ departOrArrive }: StationSearchModa
           <Flex gap={8} wrap>
             {frequentStation?.stations.map(({ name }) => (
               <Flex
+                key={name}
                 style={{
                   width: 95,
                   height: 26,
@@ -130,6 +131,7 @@ export default function StationSearchModal({ departOrArrive }: StationSearchModa
           <Flex gap={12} wrap>
             {allStations?.map((station, i) => (
               <Flex
+                key={station}
                 onMouseEnter={() => {
                   setHoveredStation(station);
                 }}
@@ -171,6 +173,7 @@ export default function StationSearchModal({ departOrArrive }: StationSearchModa
         <Flex vertical>
           {stations?.map((station, i) => (
             <Flex
+              key={`${station}-${i}`}
               style={{
                 width: 650,
                 height: 43,
