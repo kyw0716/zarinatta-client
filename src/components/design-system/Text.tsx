@@ -47,6 +47,7 @@ export default function Text({
         fontWeight: FONT_WEIGHT[weight as keyof typeof FONT_WEIGHT],
         fontSize: `${size}px`,
         color: colorType === 'white' ? 'white' : color[colorType],
+        lineHeight: '150%',
         ...style,
       }}
       onClick={onClick}

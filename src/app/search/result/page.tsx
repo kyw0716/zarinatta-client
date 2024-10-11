@@ -17,8 +17,11 @@ import Margin from '@/components/design-system/Margin';
 import { color } from '@/components/design-system/Color';
 import Text from '@/components/design-system/Text';
 import { useSearchRouter } from '@/hooks/use-search-router';
+import { useModalStore } from '@/hooks/use-modal-store';
+import { ReactNode } from 'react';
+import BookmarkModal from '@/components/modal/BookmarkModal';
 
-const TrainTypeLabel = ({ text }: { text: string }) => {
+export const TrainTypeLabel = ({ text }: { text: string }) => {
   return (
     <Flex
       style={{ padding: '4px 12px', backgroundColor: color['gray50'], color: color['gray950'] }}
@@ -30,7 +33,9 @@ const TrainTypeLabel = ({ text }: { text: string }) => {
 
 const getColumns = (
   createBookmark: UseMutateFunction<AxiosResponse<any, any>, Error, BookmarkRequestParams, unknown>,
-  deleteBookmark: UseMutateFunction<AxiosResponse<any, any>, Error, number | undefined, unknown>
+  deleteBookmark: UseMutateFunction<AxiosResponse<any, any>, Error, number | undefined, unknown>,
+  openModal: (content: ReactNode) => void,
+  departDate: string
 ) => {
   const columns: TableProps<TicketTableColumns>['columns'] = [
     {
@@ -72,15 +77,18 @@ const getColumns = (
     {
       dataIndex: 'bookmarkId',
       key: 'bookmarkId',
-      render: (_, { bookmarkId, ticketId }) => {
-        if (bookmarkId !== null)
+      render: (_, ticket) => {
+        if (ticket.bookmarkId !== null)
           return (
             <Image
               src={'/filled-star.svg'}
               alt="이미 북마크 된 티켓 이모지"
               width={26}
               height={25}
-              onClick={() => deleteBookmark(bookmarkId)}
+              onClick={() => {
+                if (ticket.bookmarkId === null) return;
+                deleteBookmark(ticket.bookmarkId);
+              }}
               style={{ cursor: 'pointer' }}
             />
           );
@@ -90,15 +98,18 @@ const getColumns = (
             alt="아직 북마크 안된 티켓 이모지"
             width={26}
             height={25}
-            onClick={() =>
-              createBookmark({
-                ticketId: ticketId,
-                wantBabySeat: 'SEAT',
-                wantFirstClass: true,
-                wantNormalSeat: 'SEAT',
-                wantWaitingReservation: true,
-              })
-            }
+            onClick={(e) => {
+              e.stopPropagation();
+              openModal(<BookmarkModal ticket={ticket} departDate={departDate} />);
+
+              // createBookmark({
+              //   ticketId: ticketId,
+              //   wantBabySeat: 'SEAT',
+              //   wantFirstClass: true,
+              //   wantNormalSeat: 'SEAT',
+              //   wantWaitingReservation: true,
+              // });
+            }}
             style={{ cursor: 'pointer' }}
           />
         );
@@ -162,6 +173,7 @@ export default function SearchResultPage() {
     })
   );
 
+  const openModal = useModalStore((state) => state.openModal);
   const { routeSearchResultPageWithParams, routeSearchResultPageWithoutParams } = useSearchRouter();
 
   return (
@@ -192,7 +204,12 @@ export default function SearchResultPage() {
       <Margin vertical size={28} />
       <Table
         style={{ width: 1140 }}
-        columns={getColumns(createBookmark, deleteBookmark)}
+        columns={getColumns(
+          createBookmark,
+          deleteBookmark,
+          openModal,
+          searchParams.get('departDate') ?? ''
+        )}
         dataSource={searchedStations?.responseList.map((station) => ({
           ...station,
           departTime: `${station.departTime.slice(8, 10)}:${station.departTime.slice(10, 12)}`,
