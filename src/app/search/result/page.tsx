@@ -101,14 +101,6 @@ const getColumns = (
             onClick={(e) => {
               e.stopPropagation();
               openModal(<BookmarkModal ticket={ticket} departDate={departDate} />);
-
-              // createBookmark({
-              //   ticketId: ticketId,
-              //   wantBabySeat: 'SEAT',
-              //   wantFirstClass: true,
-              //   wantNormalSeat: 'SEAT',
-              //   wantWaitingReservation: true,
-              // });
             }}
             style={{ cursor: 'pointer' }}
           />
