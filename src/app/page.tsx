@@ -1,13 +1,25 @@
-import Text from '@/components/design-system/Text';
+'use client';
+
 import { Flex } from 'antd';
+import dayjs from 'dayjs';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const router = useRouter();
+
   return (
     <main>
       <Flex vertical align="center">
-        <Image src={'/크롱이.jpeg'} alt="제 반려 도마뱀 사진입니다." width={650} height={1200} />
-        <Text type={'bold-32'}>크롱이</Text>
+        <Image
+          src={'/landing-page.svg'}
+          alt="랜딩 페이지 이미지"
+          width={1280}
+          height={4462}
+          layout="responsive"
+          style={{ width: '100vw', height: 'auto', cursor: 'pointer' }}
+          onClick={() => router.push(`/search?departDate=${dayjs().format('YYYYMMDD')}`)}
+        />
       </Flex>
     </main>
   );
