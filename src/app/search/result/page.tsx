@@ -48,21 +48,49 @@ const getColumns = (
       title: '출발시간',
       dataIndex: 'departTime',
       key: 'departTime',
+      render: (_, { departTime }) => {
+        return (
+          <Text type="regular-20" colorType="gray950">
+            {departTime}
+          </Text>
+        );
+      },
     },
     {
       title: '도착시간',
       dataIndex: 'arriveTime',
       key: 'arriveTime',
+      render: (_, { arriveTime }) => {
+        return (
+          <Text type="regular-20" colorType="gray950">
+            {arriveTime}
+          </Text>
+        );
+      },
     },
     {
       title: '출발역',
       dataIndex: 'departStation',
       key: 'departStation',
+      render: (_, { departStation }) => {
+        return (
+          <Text type="regular-16" colorType="gray700">
+            {departStation}
+          </Text>
+        );
+      },
     },
     {
       title: '도착역',
       dataIndex: 'arriveStation',
       key: 'arriveStation',
+      render: (_, { arriveStation }) => {
+        return (
+          <Text type="regular-16" colorType="gray700">
+            {arriveStation}
+          </Text>
+        );
+      },
     },
     {
       dataIndex: 'bookmarkId',
