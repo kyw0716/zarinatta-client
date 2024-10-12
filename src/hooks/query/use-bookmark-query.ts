@@ -8,7 +8,7 @@ export const useBookmarkQuery = (expire: boolean) =>
     queryKey: ['bookmarkQuery', expire],
     queryFn: async () =>
       (
-        await axios.get(`${API_END_POINT}/v1/bookmark/list?expire=${expire}&page=0&size=10`, {
+        await axios.get(`${API_END_POINT}/v1/bookmark/list?expire=${expire}&page=0&size=50`, {
           withCredentials: true,
         })
       ).data,
