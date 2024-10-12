@@ -6,6 +6,7 @@ type TextType =
   | 'regular-13'
   | 'regular-14'
   | 'regular-16'
+  | 'regular-20'
   | 'medium-13'
   | 'medium-16'
   | 'medium-20'
