@@ -1,10 +1,10 @@
-import { color } from '@/components/design-system/Color';
 import Margin from '@/components/design-system/Margin';
 import Text from '@/components/design-system/Text';
 import { Flex } from 'antd';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { PropsWithChildren } from 'react';
+import { InquiryButton } from './inquiryButton/InquiryButton';
 
 export const metadata: Metadata = {
   title: '고객센터',
@@ -62,35 +62,13 @@ export default function HelpLayout({ children }: PropsWithChildren) {
             </Text>
             <Margin vertical size={24} />
             <Flex align="flex-end" vertical>
-              <Flex
-                align="center"
-                justify="center"
-                style={{
-                  width: 338,
-                  height: 40,
-                  borderRadius: 8,
-                  backgroundColor: color['primary500'],
-                }}
-              >
-                <Text type="semiBold-16" colorType="white">
-                  지금 바로 문의하기
-                </Text>
-              </Flex>
+              <InquiryButton backgroundColor="primary500" textColor="white">
+                지금 바로 문의하기
+              </InquiryButton>
               <Margin vertical size={8} />
-              <Flex
-                align="center"
-                justify="center"
-                style={{
-                  width: 338,
-                  height: 40,
-                  borderRadius: 8,
-                  backgroundColor: color['gray100'],
-                }}
-              >
-                <Text type="semiBold-16" colorType="gray600">
-                  이메일로 문의하기
-                </Text>
-              </Flex>
+              <InquiryButton backgroundColor="gray100" textColor="gray600" isEmailInquiry>
+                이메일로 문의하기
+              </InquiryButton>
             </Flex>
           </Flex>
           <Flex
@@ -112,35 +90,13 @@ export default function HelpLayout({ children }: PropsWithChildren) {
             </Text>
             <Margin vertical size={24} />
             <Flex align="flex-end" vertical>
-              <Flex
-                align="center"
-                justify="center"
-                style={{
-                  width: 338,
-                  height: 40,
-                  borderRadius: 8,
-                  backgroundColor: color['primary500'],
-                }}
-              >
-                <Text type="semiBold-16" colorType="white">
-                  지금 바로 문의하기
-                </Text>
-              </Flex>
+              <InquiryButton backgroundColor="primary500" textColor="white">
+                지금 바로 문의하기
+              </InquiryButton>
               <Margin vertical size={8} />
-              <Flex
-                align="center"
-                justify="center"
-                style={{
-                  width: 338,
-                  height: 40,
-                  borderRadius: 8,
-                  backgroundColor: color['gray100'],
-                }}
-              >
-                <Text type="semiBold-16" colorType="gray600">
-                  이메일로 문의하기
-                </Text>
-              </Flex>
+              <InquiryButton backgroundColor="gray100" textColor="gray600" isEmailInquiry>
+                이매일로 문의하기
+              </InquiryButton>
             </Flex>
           </Flex>
         </Flex>
