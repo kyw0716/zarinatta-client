@@ -1,6 +1,6 @@
 import { API_END_POINT } from '@/static/api';
+import { ZarinattaAxios } from '@/utils/axios/ZarinattaInstance';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useLogoutMutation = () =>
   useMutation({
@@ -28,7 +28,6 @@ export const useLoginQuery = (code: string) =>
     { status: number }
   >({
     queryKey: ['loginQuery'],
-    queryFn: async () =>
-      await axios.get(`${API_END_POINT}/v1/auth/login?code=${code}`, { withCredentials: true }),
+    queryFn: async () => await ZarinattaAxios.securedApiInstance.get(`/v1/auth/login?code=${code}`),
     retry: false,
   });

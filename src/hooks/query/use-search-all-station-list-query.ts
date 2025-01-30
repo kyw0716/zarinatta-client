@@ -1,6 +1,5 @@
-import { API_END_POINT } from '@/static/api';
+import { ZarinattaAxios } from '@/utils/axios/ZarinattaInstance';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 interface FrequentStationResponse {
   stations: {
@@ -23,6 +22,7 @@ export const useSearchFrequentStationListQuery = () =>
   });
 
 export const searchStationList = (searchKeyword?: string) =>
-  axios.get(`${API_END_POINT}/v1/station/search?keyword=${searchKeyword ?? ''}`);
+  ZarinattaAxios.noneSecuredApiInstance.get(`/v1/station/search?keyword=${searchKeyword ?? ''}`);
 
-export const searchFrequentStation = () => axios.get(`${API_END_POINT}/v1/station/frequent`);
+export const searchFrequentStation = () =>
+  ZarinattaAxios.noneSecuredApiInstance.get('/v1/station/frequent');

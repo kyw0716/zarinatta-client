@@ -1,11 +1,14 @@
-import { API_END_POINT } from '@/static/api';
 import { SearchStationResponse } from '@/type';
+import { ZarinattaAxios } from '@/utils/axios/ZarinattaInstance';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useSearchStationByDate = (searchParams: string) =>
   useQuery<SearchStationResponse>({
     queryKey: ['searchStationByDate', searchParams],
     queryFn: async () =>
-      (await axios.get(`${API_END_POINT}/v1/ticket/search?${searchParams}&size=50&page=0`)).data,
+      await (
+        await ZarinattaAxios.noneSecuredApiInstance(
+          `/v1/ticket/search?${searchParams}&size=50&page=0`
+        )
+      ).data,
   });

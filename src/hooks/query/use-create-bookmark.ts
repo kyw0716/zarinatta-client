@@ -1,11 +1,10 @@
-import { API_END_POINT } from '@/static/api';
 import { BookmarkRequestParams } from '@/type';
+import { ZarinattaAxios } from '@/utils/axios/ZarinattaInstance';
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useCreateBookmarkMutation = (refetchIsBookmarkedList: () => void) =>
   useMutation({
     mutationFn: (requestParams: BookmarkRequestParams) =>
-      axios.post(`${API_END_POINT}/v1/bookmark/create`, requestParams, { withCredentials: true }),
+      ZarinattaAxios.securedApiInstance.post('/v1/bookmark/create', requestParams),
     onSuccess: refetchIsBookmarkedList,
   });

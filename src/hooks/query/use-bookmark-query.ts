@@ -1,16 +1,15 @@
-import { API_END_POINT } from '@/static/api';
 import { BookmarkResponse, BookmarkedTicket } from '@/type';
+import { ZarinattaAxios } from '@/utils/axios/ZarinattaInstance';
 import { useMutation, useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
 export const useBookmarkQuery = (expire: boolean) =>
   useQuery<BookmarkResponse>({
     queryKey: ['bookmarkQuery', expire],
     queryFn: async () =>
       (
-        await axios.get(`${API_END_POINT}/v1/bookmark/list?expire=${expire}&page=0&size=50`, {
-          withCredentials: true,
-        })
+        await ZarinattaAxios.securedApiInstance.get(
+          `/v1/bookmark/list?expire=${expire}&page=0&size=50`
+        )
       ).data,
     retry: false,
   });
@@ -18,7 +17,7 @@ export const useBookmarkQuery = (expire: boolean) =>
 export const useDeleteBookmarkMutation = (refetchBookmark: () => void) =>
   useMutation({
     mutationFn: (bookmarkId?: number) =>
-      axios.delete(`${API_END_POINT}/v1/bookmark/delete/${bookmarkId}`, { withCredentials: true }),
+      ZarinattaAxios.securedApiInstance.delete(`/v1/bookmark/delete/${bookmarkId}`),
     onSuccess: refetchBookmark,
   });
 
@@ -28,9 +27,9 @@ export const useBookmarkedTicketListQuery = (ticketIds?: number[]) =>
     queryFn: async () => {
       if (ticketIds === undefined) return [];
       return (
-        await axios.get(`${API_END_POINT}/v1/bookmark/search?ticketIds=${ticketIds.join(',')}`, {
-          withCredentials: true,
-        })
+        await ZarinattaAxios.securedApiInstance.get(
+          `/v1/bookmark/search?ticketIds=${ticketIds.join(',')}`
+        )
       ).data;
     },
   });
