@@ -23,7 +23,7 @@ ZarinattaAxios.securedApiInstance.interceptors.response.use(
         const value = await response.json();
 
         sessionStorage.setItem('pathNameBeforeClickLoginButton', window.location.pathname);
-        value.redirectUri;
+        window.location.href = value.redirectUri;
       }
     }
   }
