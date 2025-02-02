@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { PropsWithChildren } from 'react';
 import PageNavigatorMenu from './PageNavigatorMenu';
 import LoginButton from './LoginButton';
+import PhoneNumberInputModalButton from './PhoneNumberInputModalButton';
 
 export default function PageWithHeader({ children }: PropsWithChildren) {
   return (
@@ -31,7 +32,10 @@ export default function PageWithHeader({ children }: PropsWithChildren) {
             </Link>
             <PageNavigatorMenu />
           </Flex>
-          <LoginButton />
+          <Flex gap={15}>
+            <PhoneNumberInputModalButton />
+            <LoginButton />
+          </Flex>
         </Flex>
       </Header>
       <Content style={{ backgroundColor: '#f7f7f7' }}>{children}</Content>
