@@ -16,7 +16,7 @@ export default function LoginButton() {
   const { mutate: logoutMutation } = useLogoutMutation(() =>
     queryClient.invalidateQueries({ queryKey: ["loginQuery"] })
   );
-  const { data: loginQueryData } = useLoginQuery();
+  const loginData = queryClient.getQueryData(["loginQuery"]);
 
   const redirectToLoginPage = () => {
     if (redirectUri === undefined) return;
@@ -34,8 +34,7 @@ export default function LoginButton() {
     logoutMutation();
   };
 
-  if (loginQueryData !== undefined)
-    return <span onClick={logout}>로그아웃</span>;
+  if (loginData !== undefined) return <span onClick={logout}>로그아웃</span>;
 
   return <span onClick={redirectToLoginPage}>로그인</span>;
 }

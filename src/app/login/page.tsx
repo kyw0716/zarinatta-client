@@ -12,6 +12,7 @@ export default function LoginPage() {
   const { data: loginQueryData } = useLoginQuery(code ?? "");
 
   useEffect(() => {
+    console.log(loginQueryData);
     if (loginQueryData !== undefined) {
       SessionStorage.set("refreshToken", loginQueryData.refreshToken);
       router.push(SessionStorage.get("pathNameBeforeClickLoginButton") ?? "/");
