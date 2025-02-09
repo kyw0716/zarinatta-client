@@ -13,9 +13,7 @@ export default function LoginButton() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { data: redirectUri } = useLoginRedirectCodeQuery();
-  const { mutate: logoutMutation } = useLogoutMutation(() =>
-    queryClient.invalidateQueries({ queryKey: ["loginQuery"] })
-  );
+  const { mutate: logoutMutation } = useLogoutMutation();
   const loginData = queryClient.getQueryData(["loginQuery"]);
 
   const redirectToLoginPage = () => {
@@ -32,6 +30,7 @@ export default function LoginButton() {
   const logout = () => {
     SessionStorage.set("userInfo", null);
     logoutMutation();
+    queryClient.invalidateQueries({ queryKey: ["loginQuery"] });
   };
 
   if (loginData !== undefined) return <span onClick={logout}>로그아웃</span>;

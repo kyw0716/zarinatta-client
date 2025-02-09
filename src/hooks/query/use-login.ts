@@ -4,14 +4,13 @@ import { ZarinattaAxios } from "@/utils/axios/ZarinattaInstance";
 import { SessionStorage } from "@/utils/sessionStorage";
 import { useMutation, useQuery } from "@tanstack/react-query";
 
-export const useLogoutMutation = (onSuccess: () => void) =>
+export const useLogoutMutation = () =>
   useMutation({
     mutationFn: () =>
       fetch(`${API_END_POINT}/v1/auth/logout`, {
         method: "POST",
         credentials: "include",
       }),
-    onSuccess: () => onSuccess(),
   });
 
 export const useLoginRedirectCodeQuery = () =>
