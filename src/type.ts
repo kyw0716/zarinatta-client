@@ -14,7 +14,7 @@ export interface Ticket {
   price: string;
 }
 
-export interface TicketTableColumns extends Omit<Ticket, 'price'> {
+export interface TicketTableColumns extends Omit<Ticket, "price"> {
   bookmarkId: number | null;
 }
 
@@ -22,7 +22,7 @@ export interface SearchStationResponse extends PaginationResponse {
   responseList: Ticket[];
 }
 
-export type SeatVariation = 'SEAT' | 'STANDING_SEAT' | 'NOTFOUND';
+export type SeatVariation = "SEAT" | "STANDING_SEAT" | "NOTFOUND";
 
 export interface BookmarkRequestParams {
   ticketId: number;
@@ -44,4 +44,10 @@ export interface BookmarkResponse extends PaginationResponse {
 export interface BookmarkedTicket {
   bookmarkId: number;
   ticketId: number;
+}
+
+export interface UserInfo {
+  refreshToken: string;
+  userEmail: string;
+  userNick: string;
 }
