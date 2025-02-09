@@ -30,7 +30,7 @@ export default function LoginButton() {
   const logout = () => {
     SessionStorage.set("userInfo", null);
     logoutMutation();
-    queryClient.invalidateQueries({ queryKey: ["loginQuery"] });
+    queryClient.removeQueries({ queryKey: ["loginQuery"] });
   };
 
   if (loginData !== undefined) return <span onClick={logout}>로그아웃</span>;
