@@ -29,7 +29,7 @@ ZarinattaAxios.securedApiInstance.interceptors.response.use(
         const response = await fetch(`${API_END_POINT}/v1/auth/redirect`);
         const value = await response.json();
 
-        sessionStorage.setItem(
+        SessionStorage.set(
           "pathNameBeforeClickLoginButton",
           window.location.pathname
         );
