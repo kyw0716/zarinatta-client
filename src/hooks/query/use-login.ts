@@ -31,7 +31,8 @@ export const useLoginQuery = (code?: string) =>
     queryFn: async () => {
       const persistUserInfoData = SessionStorage.get<UserInfo>("userInfo");
 
-      if (persistUserInfoData !== null) return persistUserInfoData;
+      if (persistUserInfoData !== null && persistUserInfoData !== undefined)
+        return persistUserInfoData;
 
       const userInfo = await ZarinattaAxios.securedApiInstance.get<{
         refreshToken: string;
