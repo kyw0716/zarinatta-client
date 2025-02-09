@@ -31,6 +31,9 @@ export const useLoginQuery = (code?: string) =>
     queryFn: async () => {
       const persistUserInfoData = SessionStorage.get<UserInfo>("userInfo");
 
+      console.log(persistUserInfoData);
+      alert(persistUserInfoData);
+
       if (persistUserInfoData !== null && persistUserInfoData !== undefined)
         return persistUserInfoData;
 
