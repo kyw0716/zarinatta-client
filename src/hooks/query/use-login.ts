@@ -24,7 +24,7 @@ export const useLoginRedirectCodeQuery = () =>
     },
   });
 
-export const useLoginQuery = (code: string) =>
+export const useLoginQuery = (code?: string) =>
   useQuery<{ refreshToken: string; userEmail: string; userNick: string }>({
     queryKey: ["loginQuery"],
     queryFn: async () => {

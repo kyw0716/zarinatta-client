@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useLoginQuery,
   useLoginRedirectCodeQuery,
   useLogoutMutation,
 } from "@/hooks/query/use-login";
@@ -15,7 +16,7 @@ export default function LoginButton() {
   const { mutate: logoutMutation } = useLogoutMutation();
   const userInformation = userStore(({ userInfo }) => userInfo);
   const resetUserInfo = userStore((state) => state.resetUserInfo);
-  const loginQueryData = queryClient.getQueryData(["loginQuery"]);
+  const { data: loginQueryData } = useLoginQuery();
 
   console.log(loginQueryData);
 
