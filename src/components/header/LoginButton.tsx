@@ -6,12 +6,16 @@ import {
   useLogoutMutation,
 } from "@/hooks/query/use-login";
 import { SessionStorage } from "@/utils/sessionStorage";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 export default function LoginButton() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { data: redirectUri } = useLoginRedirectCodeQuery();
-  const { mutate: logoutMutation } = useLogoutMutation();
+  const { mutate: logoutMutation } = useLogoutMutation(() =>
+    queryClient.invalidateQueries({ queryKey: ["loginQuery"] })
+  );
   const { data: loginQueryData } = useLoginQuery();
 
   const redirectToLoginPage = () => {
