@@ -2,13 +2,27 @@ import { Flex, Input } from 'antd';
 import { useEffect, useState } from 'react';
 import { color } from '../design-system/Color';
 import Text from '../design-system/Text';
+import { useFillMockData } from '@/hooks/query/use-fill-mock-data';
+import { usePhoneNumberInput } from '@/hooks/query/use-phone-number-input';
 
 export default function PhoneNumberInputModal() {
+  const { mutate } = useFillMockData();
+
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [count, setCount] = useState(0);
+
+  const { mutate: requestUserPhoneNumber } = usePhoneNumberInput();
+
+  const increase = () => {
+    setCount((current) => current + 1);
+  };
 
   useEffect(() => {
-    console.log(phoneNumber);
-  }, [phoneNumber]);
+    if (count > 10) {
+      alert('이걸 10번이나 누르는 쉨이 있네');
+      mutate();
+    }
+  }, [count]);
 
   return (
     <Flex
@@ -44,6 +58,13 @@ export default function PhoneNumberInputModal() {
             borderRadius: 8,
             backgroundColor: color['primary500'],
             cursor: 'pointer',
+          }}
+          onClick={() => {
+            if (phoneNumber.length > 0) {
+              requestUserPhoneNumber(phoneNumber);
+            }
+
+            increase();
           }}
         >
           <Text type="semiBold-16" colorType="white">
