@@ -4,6 +4,7 @@ import { color } from '../design-system/Color';
 import Text from '../design-system/Text';
 import { useFillMockData } from '@/hooks/query/use-fill-mock-data';
 import { usePhoneNumberInput } from '@/hooks/query/use-phone-number-input';
+import { useModalStore } from '@/hooks/use-modal-store';
 
 export default function PhoneNumberInputModal() {
   const { mutate } = useFillMockData();
@@ -11,7 +12,8 @@ export default function PhoneNumberInputModal() {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [count, setCount] = useState(0);
 
-  const { mutate: requestUserPhoneNumber } = usePhoneNumberInput();
+  const closeModal = useModalStore(({ closeModal }) => closeModal);
+  const { mutate: requestUserPhoneNumber } = usePhoneNumberInput(closeModal);
 
   const increase = () => {
     setCount((current) => current + 1);
