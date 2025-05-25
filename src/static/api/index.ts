@@ -1,1 +1,1 @@
-export const API_END_POINT = "https://api.zarinatta.site/api";
+export const API_END_POINT = '3.35.250.33:8080';
