@@ -1,16 +1,24 @@
-import { ReadonlyURLSearchParams } from 'next/navigation';
+import { ReadonlyURLSearchParams } from "next/navigation";
 
 export const coreSearchParamKeys = [
-  'departStation',
-  'arriveStation',
-  'departTime',
-  'departDate',
-  'trainType',
+  "departStation",
+  "arriveStation",
+  "departTime",
+  "departDate",
 ];
-const searchParamKeys = [...coreSearchParamKeys, 'searchKeyword', 'isModalOpen', 'page', 'size'];
+const searchParamKeys = [
+  ...coreSearchParamKeys,
+  "searchKeyword",
+  "isModalOpen",
+  "page",
+  "size",
+];
 
-export const getSearchParamsObject = (searchParams: ReadonlyURLSearchParams) => {
-  const searchParamsObject: Record<(typeof searchParamKeys)[number], string> = {};
+export const getSearchParamsObject = (
+  searchParams: ReadonlyURLSearchParams
+) => {
+  const searchParamsObject: Record<(typeof searchParamKeys)[number], string> =
+    {};
 
   searchParamKeys.forEach((key) => {
     const value = searchParams.get(key);
@@ -23,8 +31,10 @@ export const getSearchParamsObject = (searchParams: ReadonlyURLSearchParams) => 
   return searchParamsObject;
 };
 
-export const getSearchURLFromObject = (object?: Record<string, string | number>) => {
-  if (object === undefined) return '';
+export const getSearchURLFromObject = (
+  object?: Record<string, string | number>
+) => {
+  if (object === undefined) return "";
 
   const queryParams: string[] = [];
 
@@ -32,5 +42,5 @@ export const getSearchURLFromObject = (object?: Record<string, string | number>)
     queryParams.push(`${key}=${encodeURIComponent(value)}`);
   });
 
-  return queryParams.join('&');
+  return queryParams.join("&");
 };
