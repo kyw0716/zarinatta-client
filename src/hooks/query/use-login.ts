@@ -39,7 +39,7 @@ export const useLoginQuery = (code?: string) =>
                 userNick: string;
             }>(`/v1/auth/login?code=${code}`);
 
-            SessionStorage.set("userInfo", userInfo);
+            SessionStorage.set("userInfo", userInfo.data);
 
             return userInfo.data;
         },
