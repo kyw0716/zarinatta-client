@@ -25,23 +25,23 @@ export const useLoginRedirectCodeQuery = () =>
   });
 
 export const useLoginQuery = (code?: string) =>
-    useQuery<{ refreshToken: string; userEmail: string; userNick: string }>({
-        queryKey: ["loginQuery"],
-        queryFn: async () => {
-            const persistUserInfoData = SessionStorage.get<UserInfo>("userInfo");
+  useQuery<{ refreshToken: string; userEmail: string; userNick: string }>({
+    queryKey: ["loginQuery"],
+    queryFn: async () => {
+      const persistUserInfoData = SessionStorage.get<UserInfo>("userInfo");
 
-            if (persistUserInfoData !== null && persistUserInfoData !== undefined)
-                return persistUserInfoData;
+      if (persistUserInfoData !== null && persistUserInfoData !== undefined)
+        return persistUserInfoData;
 
-            const userInfo = await ZarinattaAxios.securedApiInstance.get<{
-                refreshToken: string;
-                userEmail: string;
-                userNick: string;
-            }>(`/v1/auth/login?code=${code}`);
+      const userInfo = await ZarinattaAxios.securedApiInstance.get<{
+        refreshToken: string;
+        userEmail: string;
+        userNick: string;
+      }>(`/v1/auth/login?code=${code}`);
 
-            SessionStorage.set("userInfo", userInfo.data);
+      SessionStorage.set("userInfo", userInfo);
 
-            return userInfo.data;
-        },
-        retry: false,
-    });
+      return userInfo.data;
+    },
+    retry: false,
+  });

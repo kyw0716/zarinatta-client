@@ -14,7 +14,7 @@ export default function LoginButton() {
   const queryClient = useQueryClient();
   const { data: redirectUri } = useLoginRedirectCodeQuery();
   const { mutate: logoutMutation } = useLogoutMutation();
-  const { data: loginData } = useLoginQuery();
+  const loginData = queryClient.getQueryData(["loginQuery"]);
 
   const redirectToLoginPage = () => {
     if (redirectUri === undefined) return;
