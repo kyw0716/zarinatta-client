@@ -19,6 +19,8 @@ import { useRouter } from 'next/navigation';
 import { useModalStore } from '@/hooks/use-modal-store';
 import StationSearchModal from '@/components/modal/StationSearchModal';
 
+const minimumRequiredSearchParamKeys = ['departStation', 'arriveStation'] as const;
+
 type Stations = 'KTX' | 'SRT' | 'ITX';
 
 const stationSearchOptions: Record<'label' | 'value', Stations>[] = [
@@ -55,7 +57,7 @@ export default function SearchPage() {
   const searchParams = getSearchParamsObject(useSearchParams());
   const month = Number(searchParams['departDate']?.slice(4, 6));
   const date = Number(searchParams['departDate']?.slice(6));
-  const isAllRequiredFieldSelected = coreSearchParamKeys.every((key) =>
+  const isMinimumRequiredFieldSelected = minimumRequiredSearchParamKeys.every((key) =>
     Object.keys(searchParams).includes(key)
   );
 
@@ -211,13 +213,13 @@ export default function SearchPage() {
           width: 608,
           height: 54,
           borderRadius: 8,
-          backgroundColor: color[isAllRequiredFieldSelected ? 'primary500' : 'primary100'],
+          backgroundColor: color[isMinimumRequiredFieldSelected ? 'primary500' : 'primary100'],
           border: 'none',
           cursor: 'pointer',
         }}
         onClick={() => router.push(`/search/result?${getSearchURLFromObject(searchParams)}`)}
       >
-        <Text type="semiBold-20" colorType={isAllRequiredFieldSelected ? 'white' : 'primary200'}>
+        <Text type="semiBold-20" colorType={isMinimumRequiredFieldSelected ? 'white' : 'primary200'}>
           열차 조회하기
         </Text>
       </Flex>

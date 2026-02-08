@@ -1,26 +1,25 @@
 'use client';
 
-import { useModalStore } from '@/hooks/use-modal-store';
+import {useModalStore} from '@/hooks/use-modal-store';
 import PhoneNumberInputModal from '../modal/PhoneNumberInputModal';
-import { useQueryClient } from '@tanstack/react-query';
+import {useUserMeQuery} from '@/hooks/query/use-login';
 
 export default function PhoneNumberInputModalButton() {
-  const queryClient = useQueryClient();
-  const loginData = queryClient.getQueryData(['loginQuery']);
+    const {data: userData} = useUserMeQuery();
 
-  const { openModal } = useModalStore();
+    const {openModal} = useModalStore();
 
-  if (loginData === undefined) return <></>;
+    if (userData === undefined) return <></>;
 
-  return (
-    <span
-      style={{ cursor: 'pointer' }}
-      onClick={(e) => {
-        openModal(<PhoneNumberInputModal />);
-        e.stopPropagation();
-      }}
-    >
+    return (
+        <span
+            style={{cursor: 'pointer'}}
+            onClick={(e) => {
+                openModal(<PhoneNumberInputModal/>);
+                e.stopPropagation();
+            }}
+        >
       전화번호 입력
     </span>
-  );
+    );
 }

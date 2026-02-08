@@ -4,6 +4,7 @@ import {
   useLoginQuery,
   useLoginRedirectCodeQuery,
   useLogoutMutation,
+  useUserMeQuery,
 } from "@/hooks/query/use-login";
 import { SessionStorage } from "@/utils/sessionStorage";
 import { useQueryClient } from "@tanstack/react-query";
@@ -14,6 +15,7 @@ export default function LoginButton() {
   const queryClient = useQueryClient();
   const { data: redirectUri } = useLoginRedirectCodeQuery();
   const { mutate: logoutMutation } = useLogoutMutation();
+  const { data: userData } = useUserMeQuery();
   const loginData = queryClient.getQueryData(["loginQuery"]);
 
   const redirectToLoginPage = () => {
@@ -28,12 +30,15 @@ export default function LoginButton() {
   };
 
   const logout = () => {
-    SessionStorage.set("userInfo", null);
-    logoutMutation();
-    queryClient.removeQueries({ queryKey: ["loginQuery"] });
+    logoutMutation(undefined, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ["userMe"] });
+        queryClient.removeQueries({ queryKey: ["loginQuery"] });
+      }
+    });
   };
 
-  if (loginData !== undefined) return <span onClick={logout}>로그아웃</span>;
+  if (userData) return <span onClick={logout}>로그아웃</span>;
 
   return <span onClick={redirectToLoginPage}>로그인</span>;
 }

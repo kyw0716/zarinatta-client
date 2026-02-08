@@ -51,3 +51,10 @@ export interface UserInfo {
   userEmail: string;
   userNick: string;
 }
+
+export interface Me {
+  id: string;
+  email: string;
+  nickname: string;
+  phoneNumber: string | null;
+}
