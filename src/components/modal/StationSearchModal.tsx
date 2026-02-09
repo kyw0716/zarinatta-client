@@ -85,7 +85,7 @@ export default function StationSearchModal({ departOrArrive }: StationSearchModa
             style={{
               borderBottom: `2px solid ${color['primary500']}`,
               lineHeight: '24px',
-              width: 133,
+              width: 140,
             }}
           >
             많이 이용하는 기차역
@@ -122,7 +122,7 @@ export default function StationSearchModal({ departOrArrive }: StationSearchModa
             style={{
               borderBottom: `2px solid ${color['primary500']}`,
               lineHeight: '24px',
-              width: 76,
+              width: 80,
             }}
           >
             모든 정차역
