@@ -4,12 +4,17 @@ import { color } from '../design-system/Color';
 import Text from '../design-system/Text';
 import { usePhoneNumberInput } from '@/hooks/query/use-phone-number-input';
 import { useModalStore } from '@/hooks/use-modal-store';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function PhoneNumberInputModal() {
   const [phoneNumber, setPhoneNumber] = useState('');
+  const queryClient = useQueryClient();
 
   const closeModal = useModalStore(({ closeModal }) => closeModal);
-  const { mutate: requestUserPhoneNumber } = usePhoneNumberInput(closeModal);
+  const { mutate: requestUserPhoneNumber } = usePhoneNumberInput(() => {
+    closeModal();
+    queryClient.invalidateQueries({ queryKey: ['userMe'] });
+  });
 
   return (
     <Flex
