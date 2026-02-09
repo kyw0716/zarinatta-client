@@ -196,6 +196,7 @@ export default function SearchResultPage() {
   const handleEmptyBookmarkClick = (ticket: TicketTableColumns) => {
     if (userData === undefined) {
       if (redirectUri === undefined) return;
+      alert('로그인이 필요한 기능입니다.\n로그인 후 이용해주세요.');
       SessionStorage.set('pathNameBeforeClickLoginButton', window.location.pathname + window.location.search);
       router.push(redirectUri);
       return;
