@@ -20,11 +20,15 @@ import { useSearchRouter } from '@/hooks/use-search-router';
 import { useModalStore } from '@/hooks/use-modal-store';
 import { ReactNode } from 'react';
 import BookmarkModal from '@/components/modal/BookmarkModal';
+import PhoneNumberInputModal from '@/components/modal/PhoneNumberInputModal';
 import { TrainTypeChip } from '@/components/chip/TrainTypeChip';
+import { useUserMeQuery, useLoginRedirectCodeQuery } from '@/hooks/query/use-login';
+import { SessionStorage } from '@/utils/sessionStorage';
+import { useRouter } from 'next/navigation';
 
 const getColumns = (
   deleteBookmark: UseMutateFunction<AxiosResponse<any, any>, Error, number | undefined, unknown>,
-  openModal: (content: ReactNode) => void,
+  onEmptyBookmarkClick: (ticket: TicketTableColumns) => void,
   departDate: string
 ) => {
   const columns: TableProps<TicketTableColumns>['columns'] = [
@@ -118,7 +122,7 @@ const getColumns = (
             height={25}
             onClick={(e) => {
               e.stopPropagation();
-              openModal(<BookmarkModal ticket={ticket} departDate={departDate} />);
+              onEmptyBookmarkClick(ticket);
             }}
             style={{ cursor: 'pointer' }}
           />
@@ -159,9 +163,12 @@ const TrainSearchButton = ({ isSelected, handleClick, content }: TrainSearchButt
 
 export default function SearchResultPage() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const searchURL = getSearchURLFromObject(getSearchParamsObject(searchParams));
 
   const queryClient = useQueryClient();
+  const { data: userData } = useUserMeQuery();
+  const { data: redirectUri } = useLoginRedirectCodeQuery();
   const { data: searchedStations } = useSearchStationByDate(searchURL);
   const { data: bookmarkedTicketList } = useBookmarkedTicketListQuery(
     searchedStations?.responseList.map(({ ticketId }) => ticketId)
@@ -185,6 +192,20 @@ export default function SearchResultPage() {
 
   const openModal = useModalStore((state) => state.openModal);
   const { routeSearchResultPageWithParams, routeSearchResultPageWithoutParams } = useSearchRouter();
+
+  const handleEmptyBookmarkClick = (ticket: TicketTableColumns) => {
+    if (userData === undefined) {
+      if (redirectUri === undefined) return;
+      SessionStorage.set('pathNameBeforeClickLoginButton', window.location.pathname + window.location.search);
+      router.push(redirectUri);
+      return;
+    }
+    if (userData.phoneNumber === null) {
+      openModal(<PhoneNumberInputModal />);
+      return;
+    }
+    openModal(<BookmarkModal ticket={ticket} departDate={searchParams.get('departDate') ?? ''} />);
+  };
 
   return (
     <Flex vertical>
@@ -214,7 +235,7 @@ export default function SearchResultPage() {
       <Margin vertical size={28} />
       <Table
         style={{ width: 1140 }}
-        columns={getColumns(deleteBookmark, openModal, searchParams.get('departDate') ?? '')}
+        columns={getColumns(deleteBookmark, handleEmptyBookmarkClick, searchParams.get('departDate') ?? '')}
         dataSource={searchedStations?.responseList.map((station) => ({
           ...station,
           departTime: `${station.departTime.slice(8, 10)}:${station.departTime.slice(10, 12)}`,

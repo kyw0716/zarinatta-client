@@ -1,30 +1,15 @@
 import { Flex, Input } from 'antd';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { color } from '../design-system/Color';
 import Text from '../design-system/Text';
-import { useFillMockData } from '@/hooks/query/use-fill-mock-data';
 import { usePhoneNumberInput } from '@/hooks/query/use-phone-number-input';
 import { useModalStore } from '@/hooks/use-modal-store';
 
 export default function PhoneNumberInputModal() {
-  const { mutate } = useFillMockData();
-
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [count, setCount] = useState(0);
 
   const closeModal = useModalStore(({ closeModal }) => closeModal);
   const { mutate: requestUserPhoneNumber } = usePhoneNumberInput(closeModal);
-
-  const increase = () => {
-    setCount((current) => current + 1);
-  };
-
-  useEffect(() => {
-    if (count > 10) {
-      alert('이걸 10번이나 누르는 쉨이 있네');
-      mutate();
-    }
-  }, [count]);
 
   return (
     <Flex
@@ -46,6 +31,11 @@ export default function PhoneNumberInputModal() {
     >
       <Flex vertical align="center" gap={16} style={{ position: 'relative' }}>
         <Text type="semiBold-24">전화번호 입력</Text>
+        <Text type="regular-16" colorType="gray600" style={{ textAlign: 'center' }}>
+          전화번호 입력이 필요한 기능입니다.
+          <br />
+          전화번호를 입력해주세요.
+        </Text>
         <Input
           placeholder="전화번호를 입력해주세요."
           style={{ width: 560, height: 52, backgroundColor: '#F7F7F7' }}
@@ -65,8 +55,6 @@ export default function PhoneNumberInputModal() {
             if (phoneNumber.length > 0) {
               requestUserPhoneNumber(phoneNumber);
             }
-
-            increase();
           }}
         >
           <Text type="semiBold-16" colorType="white">
