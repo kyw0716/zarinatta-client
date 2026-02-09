@@ -32,7 +32,8 @@ export default function LoginButton() {
   const logout = () => {
     logoutMutation(undefined, {
       onSuccess: () => {
-        queryClient.removeQueries({ queryKey: ["userMe"] });
+        queryClient.cancelQueries({ queryKey: ["userMe"] });
+        queryClient.setQueryData(["userMe"], undefined);
         queryClient.removeQueries({ queryKey: ["loginQuery"] });
       }
     });
