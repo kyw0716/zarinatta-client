@@ -37,7 +37,7 @@ export default function PhoneNumberInputModal() {
       <Flex vertical align="center" gap={16} style={{ position: 'relative' }}>
         <Text type="semiBold-24">전화번호 입력</Text>
         <Input
-          placeholder="전화번호를 입력해주세요."
+          placeholder="전화번호를 입력해주세요. (예: 01012345678)"
           style={{ width: 560, height: 52, backgroundColor: '#F7F7F7' }}
           onChange={(e) => setPhoneNumber(e.target.value)}
         />
