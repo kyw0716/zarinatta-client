@@ -10,12 +10,14 @@ interface InquiryButtonProps extends PropsWithChildren {
   backgroundColor: ColorType;
   textColor: ColorType | 'white';
   isEmailInquiry?: boolean;
+    url?: string;
 }
 
 export function InquiryButton({
   backgroundColor,
   textColor,
   isEmailInquiry,
+    url,
   children,
 }: InquiryButtonProps) {
   const router = useRouter();
@@ -32,6 +34,10 @@ export function InquiryButton({
         cursor: 'pointer',
       }}
       onClick={() => {
+          if (url){
+              window.open(url, '_blank');
+              return;
+            }
         isEmailInquiry
           ? router.push(
               'https://mail.google.com/mail/u/0/#inbox?compose=VpCqJKhwRPdbVlDWzQMtZmVzXJlNVxwWDgJnzmnSrnLCqVzdDPfDJDhMrqHTPghVMVXjMmG'

@@ -62,7 +62,7 @@ export default function HelpLayout({ children }: PropsWithChildren) {
             </Text>
             <Margin vertical size={24} />
             <Flex align="flex-end" vertical>
-              <InquiryButton backgroundColor="primary500" textColor="white">
+              <InquiryButton backgroundColor="primary500" textColor="white" url="https://open.kakao.com/o/s95cNFEh">
                 지금 바로 문의하기
               </InquiryButton>
               <Margin vertical size={8} />
@@ -90,7 +90,7 @@ export default function HelpLayout({ children }: PropsWithChildren) {
             </Text>
             <Margin vertical size={24} />
             <Flex align="flex-end" vertical>
-              <InquiryButton backgroundColor="primary500" textColor="white">
+              <InquiryButton backgroundColor="primary500" textColor="white" url="https://open.kakao.com/o/sbnDeHfi">
                 지금 바로 문의하기
               </InquiryButton>
               <Margin vertical size={8} />
