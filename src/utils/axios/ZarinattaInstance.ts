@@ -44,7 +44,7 @@ ZarinattaAxios.securedApiInstance.interceptors.response.use(
 
         SessionStorage.set(
           "pathNameBeforeClickLoginButton",
-          window.location.pathname
+          window.location.pathname + window.location.search
         );
         window.location.href = value.redirectUri;
       }

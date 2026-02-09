@@ -25,7 +25,7 @@ export default function LoginButton() {
 
     SessionStorage.set(
       "pathNameBeforeClickLoginButton",
-      window.location.pathname
+      window.location.pathname + window.location.search
     );
 
     router.push(redirectUri);
