@@ -14,6 +14,8 @@ export const ZarinattaAxios = {
   noneSecuredApiInstance: axios.create({ ...coreAxiosConfig }),
 };
 
+let isHandling401 = false;
+
 ZarinattaAxios.securedApiInstance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
@@ -26,10 +28,15 @@ ZarinattaAxios.securedApiInstance.interceptors.response.use(
         pathname.startsWith("/help");
 
       if (isNoAlertPath) return Promise.reject(error);
+      if (isHandling401) return Promise.reject(error);
 
+      isHandling401 = true;
       const isUserWantToLogin = window.confirm(
         "로그인이 필요한 서비스입니다. 로그인 하시겠습니까?"
       );
+      setTimeout(() => {
+        isHandling401 = false;
+      }, 300);
 
       if (isUserWantToLogin) {
         const response = await fetch(`${API_END_POINT}/v1/auth/redirect`);
