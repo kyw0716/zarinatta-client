@@ -9,6 +9,8 @@ export default function PhoneNumberInputModalButton() {
 
     const {openModal} = useModalStore();
 
+    console.log('userData', userData);
+
     if (userData === undefined || userData.phoneNumber !== null) return <></>;
 
     return (
