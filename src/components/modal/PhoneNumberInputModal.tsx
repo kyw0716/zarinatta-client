@@ -31,11 +31,6 @@ export default function PhoneNumberInputModal() {
     >
       <Flex vertical align="center" gap={16} style={{ position: 'relative' }}>
         <Text type="semiBold-24">전화번호 입력</Text>
-        <Text type="regular-16" colorType="gray600" style={{ textAlign: 'center' }}>
-          전화번호 입력이 필요한 기능입니다.
-          <br />
-          전화번호를 입력해주세요.
-        </Text>
         <Input
           placeholder="전화번호를 입력해주세요."
           style={{ width: 560, height: 52, backgroundColor: '#F7F7F7' }}

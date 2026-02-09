@@ -201,6 +201,7 @@ export default function SearchResultPage() {
       return;
     }
     if (userData.phoneNumber === null) {
+      alert('전화번호 입력이 필요한 기능입니다.\n전화번호를 입력해주세요.');
       openModal(<PhoneNumberInputModal />);
       return;
     }
