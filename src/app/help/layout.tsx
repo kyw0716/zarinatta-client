@@ -95,7 +95,7 @@ export default function HelpLayout({ children }: PropsWithChildren) {
               </InquiryButton>
               <Margin vertical size={8} />
               <InquiryButton backgroundColor="gray100" textColor="gray600" isEmailInquiry>
-                이매일로 문의하기
+                이메일로 문의하기
               </InquiryButton>
             </Flex>
           </Flex>
