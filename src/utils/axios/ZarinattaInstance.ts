@@ -18,10 +18,14 @@ ZarinattaAxios.securedApiInstance.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
     if (error.response?.status === 401) {
-      // 로그인 페이지에서는 confirm을 띄우지 않고 에러 전파
-      if (typeof window !== "undefined" && window.location.pathname === "/login") {
-        return Promise.reject(error);
-      }
+      const pathname = typeof window !== "undefined" ? window.location.pathname : "";
+      const isNoAlertPath =
+        pathname === "/" ||
+        pathname === "/login" ||
+        pathname.startsWith("/search") ||
+        pathname.startsWith("/help");
+
+      if (isNoAlertPath) return Promise.reject(error);
 
       const isUserWantToLogin = window.confirm(
         "로그인이 필요한 서비스입니다. 로그인 하시겠습니까?"
@@ -38,5 +42,6 @@ ZarinattaAxios.securedApiInstance.interceptors.response.use(
         window.location.href = value.redirectUri;
       }
     }
+    return Promise.reject(error);
   }
 );

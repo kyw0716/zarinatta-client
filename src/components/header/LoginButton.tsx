@@ -13,7 +13,7 @@ export default function LoginButton() {
   const router = useRouter();
   const pathname = usePathname();
   const queryClient = useQueryClient();
-  const isLoginPage = pathname === "/login";
+  const isLoginPage = pathname === "/login"
   const { data: redirectUri } = useLoginRedirectCodeQuery();
   const { mutate: logoutMutation } = useLogoutMutation();
   const { data: userData } = useUserMeQuery({ enabled: !isLoginPage });
