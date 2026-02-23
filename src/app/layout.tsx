@@ -6,6 +6,7 @@ import PageWithHeader from '@/components/header/PageWithHeader';
 import { Suspense } from 'react';
 import ModalProvider from '@/components/modal/ModalProvider';
 import QueryProvider from '@/components/query-provider/query-provider';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 export const metadata: Metadata = {
   title: '자리나따',
@@ -37,6 +38,7 @@ export default function RootLayout({
           </ModalProvider>
         </QueryProvider>
       </body>
+      <GoogleAnalytics gaId={"G-DHNPBDNFSJ"} />
     </html>
   );
 }
